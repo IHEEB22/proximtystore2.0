@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:proximitystore/models/product.dart';
 
 import '../models/sector.dart';
+import '../models/store.dart';
 import '../services/validation_items.dart';
 
 class BusinessProvider with ChangeNotifier {
@@ -64,9 +65,12 @@ class BusinessProvider with ChangeNotifier {
 
   TextEditingController _emailTextEditingController = TextEditingController();
   TextEditingController _productTextEditingController = TextEditingController();
-  TextEditingController _passwordTextEditingController = TextEditingController();
-  TextEditingController _newPasswordTextEditingController = TextEditingController();
-  TextEditingController _repeatNewPasswordTextEditingController = TextEditingController();
+  TextEditingController _passwordTextEditingController =
+      TextEditingController();
+  TextEditingController _newPasswordTextEditingController =
+      TextEditingController();
+  TextEditingController _repeatNewPasswordTextEditingController =
+      TextEditingController();
   TextEditingController _businessName = TextEditingController();
   TextEditingController _adress = TextEditingController();
   TextEditingController _phoneNumber = TextEditingController();
@@ -84,11 +88,16 @@ class BusinessProvider with ChangeNotifier {
   bool get isReapetPasswordEqualpassword => _isReapetPasswordEqualpassword;
   bool get isEmailValide => _isEmailValide;
 
-  TextEditingController get emailTextEditingController => _emailTextEditingController;
-  TextEditingController get repeatNewPasswordTextEditingController => _repeatNewPasswordTextEditingController;
-  TextEditingController get passwordTextEditingController => _passwordTextEditingController;
-  TextEditingController get newPasswordTextEditingController => _newPasswordTextEditingController;
-  TextEditingController get productTextEditingController => _productTextEditingController;
+  TextEditingController get emailTextEditingController =>
+      _emailTextEditingController;
+  TextEditingController get repeatNewPasswordTextEditingController =>
+      _repeatNewPasswordTextEditingController;
+  TextEditingController get passwordTextEditingController =>
+      _passwordTextEditingController;
+  TextEditingController get newPasswordTextEditingController =>
+      _newPasswordTextEditingController;
+  TextEditingController get productTextEditingController =>
+      _productTextEditingController;
 
   TextEditingController get businessName => _businessName;
   TextEditingController get adress => _adress;
@@ -111,18 +120,26 @@ class BusinessProvider with ChangeNotifier {
   bool get isProducFieldInFocus => _isProducFieldInFocus;
 
   Product? newProduct;
+  late String storeId;
 
   void setNewProduct({required Product product}) {
     newProduct = product;
     notifyListeners();
   }
 
+  void setNewStore({required String store}) {
+    storeId = store;
+    notifyListeners();
+  }
+
   Future<List<Product>> getProductSuggestion(String query) async {
-    final String response = await rootBundle.loadString('assets/fake_data/products.json');
+    final String response =
+        await rootBundle.loadString('assets/fake_data/products.json');
 
     List data = await json.decode(response);
 
-    List<Product> productList = data.map((json) => Product.fromJson(json)).toList();
+    List<Product> productList =
+        data.map((json) => Product.fromJson(json)).toList();
     if (newProduct != null) productList.add(newProduct!);
 
     return productList.where((product) {
@@ -138,7 +155,8 @@ class BusinessProvider with ChangeNotifier {
   }
 
   Future<List<Sector>> getSectors() async {
-    final String response = await rootBundle.loadString('assets/fake_data/sectorsList.json');
+    final String response =
+        await rootBundle.loadString('assets/fake_data/sectorsList.json');
     List data = await json.decode(response);
     return data.map((json) => Sector.fromJson(json)).toList();
   }
@@ -151,13 +169,15 @@ class BusinessProvider with ChangeNotifier {
       notifyListeners();
     } else {
       if (sectorName == sectorNameSelected) {
-        chekedsectorsList[lastSectorNameSelected] = !(chekedsectorsList[sectorName] ?? true);
+        chekedsectorsList[lastSectorNameSelected] =
+            !(chekedsectorsList[sectorName] ?? true);
 
         sectorNameSelected = false;
         notifyListeners();
       } else {
         chekedsectorsList[lastSectorNameSelected] = false;
-        chekedsectorsList[sectorName] = !(chekedsectorsList[sectorName] ?? true);
+        chekedsectorsList[sectorName] =
+            !(chekedsectorsList[sectorName] ?? true);
         lastSectorNameSelected = sectorName;
         sectorNameSelected = true;
         lastSectorNameSelected = sectorName;
@@ -256,7 +276,8 @@ class BusinessProvider with ChangeNotifier {
   void setIsReapetPasswordEqualNewPassword() {
     if (isNewPasswordValide && isRepeatNewPasswordValide) {
       _isReapetPasswordEqualpassword =
-          _repeatNewPasswordTextEditingController.text == _newPasswordTextEditingController.text;
+          _repeatNewPasswordTextEditingController.text ==
+              _newPasswordTextEditingController.text;
     } else {
       _isReapetPasswordEqualpassword = false;
     }
@@ -314,7 +335,8 @@ class BusinessProvider with ChangeNotifier {
   }
 
   void addChekedSector(String sectorName) {
-    if (!_chekedsectorsList.keys.contains(sectorName) && (_sectorsData[sectorName] == true)) {
+    if (!_chekedsectorsList.keys.contains(sectorName) &&
+        (_sectorsData[sectorName] == true)) {
       _chekedsectorsList.addAll({sectorName: false});
     }
     notifyListeners();

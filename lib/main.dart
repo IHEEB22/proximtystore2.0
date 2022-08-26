@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -21,8 +22,15 @@ Future<void> main() async {
     statusBarIconBrightness: AppColors.statusbarColor,
   ));
   WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.removeAfter(initialization);
+  await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
+  Future<void> initialization(BuildContext context) async {
+    await Future.delayed(
+      Duration(seconds: 5),
+    );
+  }
+
+  FlutterNativeSplash.removeAfter(initialization);
 
   runApp(
     EasyLocalization(
@@ -49,12 +57,6 @@ Future<void> main() async {
         child: App(),
       ),
     ),
-  );
-}
-
-Future<void> initialization(BuildContext context) async {
-  await Future.delayed(
-    Duration(seconds: 2),
   );
 }
 

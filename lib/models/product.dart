@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:proximitystore/models/store.dart';
 
 class Product {
   final String productName;
   final String productImage;
   final double productPrice;
-  String? storeFarDestination;
   String? productStatus;
 
   Product({
@@ -15,7 +15,6 @@ class Product {
     required this.productImage,
     required this.productPrice,
     this.productStatus,
-    this.storeFarDestination,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -30,19 +29,12 @@ class Product {
       productImage: productImage,
       productPrice: productPrice,
       productStatus: productStatus,
-      storeFarDestination: storeFarDestination,
     );
   }
   Map<String, dynamic> toJson() => {
         'product_Name': productName,
         'product_image': productImage,
         'product_Price': productPrice,
-        'store_far_destination': storeFarDestination,
         'product_status': productStatus,
       };
-
-  @override
-  String toString() {
-    return 'product(product_Name: $productName,product_image: $productImage,product_Price: $productPrice,store_far_destination: $storeFarDestination,product_status: $productStatus)';
-  }
 }
