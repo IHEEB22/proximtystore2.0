@@ -9,6 +9,8 @@ export 'authentification/register_page.dart';
 export 'authentification/forgot_password_page.dart';
 export 'authentification/email_verification_page.dart';
 export 'authentification/welcome_page.dart';
+export 'authentification/login_page_wrapper.dart';
+export 'authentification/welcome_page_wrapper.dart';
 export 'commerce/settings_page.dart';
 export '../widgets/sheet_store_sectors.dart';
 export 'commerce/store_description_page.dart';

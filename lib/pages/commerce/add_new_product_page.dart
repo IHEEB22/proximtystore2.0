@@ -297,7 +297,7 @@ class AddNewProductPage extends StatelessWidget {
                                   child: SizedBox(
                                       width: double.infinity,
                                       child: CustomBlueButton(
-                                        onPressed: () {
+                                        onPressed: () async {
                                           String storeConnected = context
                                                   .read<BusinessProvider>()
                                                   .storeId ??
@@ -315,10 +315,11 @@ class AddNewProductPage extends StatelessWidget {
                                                 .text),
                                             productStatus: 'en attente',
                                           );
-                                          final docStore = FirebaseFirestore
-                                              .instance
-                                              .collection('stores')
-                                              .doc(storeConnected)
+                                          final docStoreConnected =
+                                              FirebaseFirestore.instance
+                                                  .collection('stores')
+                                                  .doc(storeConnected);
+                                          await docStoreConnected
                                               .collection('products')
                                               .doc(newProduct.productName)
                                               .set(newProduct.toJson());

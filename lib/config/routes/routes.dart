@@ -5,13 +5,19 @@ import 'package:proximitystore/widgets/custom_page_route.dart';
 
 class AppRoutes {
   static const String geoLocationOffPage = '/geoLocationOffPage';
-  static const String addLocalisationAddressPage = '/addLocalisationAddressPage';
-  static const String geoLocationOutsideParisPage = '/geoLocationOutsideParisPage';
-  static const String geolocationSearchProductPage = '/geolocationSearchProductPage';
+  static const String addLocalisationAddressPage =
+      '/addLocalisationAddressPage';
+  static const String geoLocationOutsideParisPage =
+      '/geoLocationOutsideParisPage';
+  static const String geolocationSearchProductPage =
+      '/geolocationSearchProductPage';
   static const String searchFiltredProductPage = '/searchFiltredProductPage';
-  static const String geolocationEditAdressePage = '/geolocationEditAdressePage';
+  static const String geolocationEditAdressePage =
+      '/geolocationEditAdressePage';
 
   static const String loginPage = '/loginPage';
+  static const String loginPageWrapper = '/loginPageWrapper';
+  static const String welcomePageWrapper = '/welcomePageWrapper';
   static const String welcomePage = '/welcomePage';
   static const String forgetPassword = '/forgetPassword';
   static const String resetPassword = '/resetPassword';
@@ -29,11 +35,14 @@ class AppRoutes {
       case geoLocationOffPage:
         return CustomPageRoute(Route: GeoLocationOffPage(), settings: settings);
       case addLocalisationAddressPage:
-        return CustomPageRoute(Route: AddLocalisationAddressPage(), settings: settings);
+        return CustomPageRoute(
+            Route: AddLocalisationAddressPage(), settings: settings);
       case geoLocationOutsideParisPage:
-        return CustomPageRoute(Route: GeolocationOutsideParisPage(), settings: settings);
+        return CustomPageRoute(
+            Route: GeolocationOutsideParisPage(), settings: settings);
       case geolocationSearchProductPage:
-        return CustomPageRoute(Route: GeolocationSearchProductPage(), settings: settings);
+        return CustomPageRoute(
+            Route: GeolocationSearchProductPage(), settings: settings);
       case loginPage:
         return CustomPageRoute(Route: LoginPage(), settings: settings);
       case welcomePage:
@@ -41,13 +50,15 @@ class AppRoutes {
       case forgetPassword:
         return CustomPageRoute(Route: ForgetPassword(), settings: settings);
       case emailVerificationPage:
-        return CustomPageRoute(Route: EmailVerificationPage(), settings: settings);
+        return CustomPageRoute(
+            Route: EmailVerificationPage(), settings: settings);
       case registerPage:
         return CustomPageRoute(Route: RegisterPage(), settings: settings);
       case resetPassword:
         return CustomPageRoute(Route: ResetPassword(), settings: settings);
       case storeDescriptionPage:
-        return CustomPageRoute(Route: StoreDescriptionPage(), settings: settings);
+        return CustomPageRoute(
+            Route: StoreDescriptionPage(), settings: settings);
       case settingsPage:
         return CustomPageRoute(Route: SettingsPage(), settings: settings);
       case termOfServicePage:
@@ -58,11 +69,18 @@ class AppRoutes {
       case addNewProductPage:
         return CustomPageRoute(Route: AddNewProductPage(), settings: settings);
       case searchFiltredProductPage:
-        return CustomPageRoute(Route: SearchFiltredProductPage(), settings: settings);
+        return CustomPageRoute(
+            Route: SearchFiltredProductPage(), settings: settings);
       case productDescriptionPage:
-        return CustomPageRoute(Route: ProductDescriptionPage(), settings: settings);
+        return CustomPageRoute(
+            Route: ProductDescriptionPage(), settings: settings);
       case geolocationEditAdressePage:
-        return CustomPageRoute(Route: GeolocationEditAdressePage(), settings: settings);
+        return CustomPageRoute(
+            Route: GeolocationEditAdressePage(), settings: settings);
+      case loginPageWrapper:
+        return CustomPageRoute(Route: LoginPageWrapper(), settings: settings);
+      case welcomePageWrapper:
+        return CustomPageRoute(Route: LoginPageWrapper(), settings: settings);
       default:
         throw ('this route name does not exist');
     }

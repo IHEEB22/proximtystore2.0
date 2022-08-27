@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
   final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser!;
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -689,7 +691,7 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                   .collection('stores')
                                                   .doc();
                                               final Store newStore = Store(
-                                                  storeOwnerId: 'iheb',
+                                                  storeOwnerId: user.uid,
                                                   storeId: docStore.id,
                                                   storeSectors: [],
                                                   storeName: '',

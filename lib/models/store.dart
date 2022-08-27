@@ -5,7 +5,8 @@ import 'package:proximitystore/models/product.dart';
 
 class Store {
   final String storeName;
-  final String storeID;
+  final String storeOwnerId;
+  final String storeId;
   final List<String> storeSectors;
   List<Product> storeProducts = [];
   bool? storeStatus;
@@ -14,7 +15,8 @@ class Store {
   String? storeDescription;
 
   Store({
-    required this.storeID,
+    required this.storeId,
+    required this.storeOwnerId,
     required this.storeSectors,
     required this.storeName,
     required this.storeLocation,
@@ -31,10 +33,12 @@ class Store {
     final storeDescription = json['store_description'] as String?;
     final storeProducts = json['store_products'] as List<Product>;
     final storeSectors = json['store_sectors'] as List<String>;
-    final storeID = json['store_ID'] as String;
+    final storeId = json['store_id'] as String;
+    final storeOwnerId = json['store_owner_Id'] as String;
 
     return Store(
-        storeID: storeID,
+        storeId: storeId,
+        storeOwnerId: storeOwnerId,
         storeStatus: storeStatus,
         storeName: storeName,
         storeLocation: storeLocation,
@@ -44,7 +48,8 @@ class Store {
   }
 
   Map<String, dynamic> toJson() => {
-        'store_id': storeID,
+        'store_id': storeId,
+        'store_owner_Id': storeOwnerId,
         'store_name': storeName,
         'store_status': storeStatus,
         'store_location': storeLocation,

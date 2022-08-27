@@ -40,18 +40,35 @@ class GeolocationSearchProductPage extends StatelessWidget {
                       0.02.sw.horizontalSpace,
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, AppRoutes.geolocationEditAdressePage);
-                          context.read<LocalistaionControllerprovider>().disposeAdressValue();
+                          Navigator.pushNamed(
+                              context, AppRoutes.geolocationEditAdressePage);
+                          context
+                              .read<LocalistaionControllerprovider>()
+                              .disposeAdressValue();
                         },
                         child: Text(
                           textAlign: TextAlign.center,
-                          context.read<LocalistaionControllerprovider>().adress.text.length > 50
-                              ? context.read<LocalistaionControllerprovider>().adress.text.substring(0, 50) + '...'
-                              : context.read<LocalistaionControllerprovider>().adress.text,
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                                decoration: TextDecoration.underline,
-                                fontSize: 14.sp,
-                              ),
+                          context
+                                      .read<LocalistaionControllerprovider>()
+                                      .adress
+                                      .text
+                                      .length >
+                                  50
+                              ? context
+                                      .read<LocalistaionControllerprovider>()
+                                      .adress
+                                      .text
+                                      .substring(0, 50) +
+                                  '...'
+                              : context
+                                  .read<LocalistaionControllerprovider>()
+                                  .adress
+                                  .text,
+                          style:
+                              Theme.of(context).textTheme.bodyText1?.copyWith(
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 14.sp,
+                                  ),
                         ),
                       ),
                     ],
@@ -63,19 +80,21 @@ class GeolocationSearchProductPage extends StatelessWidget {
                         children: <InlineSpan>[
                           TextSpan(
                             text: 'proximity'.tr(),
-                            style: Theme.of(context).textTheme.headline3?.copyWith(
-                                  color: AppColors.blueColor,
-                                  fontSize: 40.sp,
-                                  letterSpacing: 0.6,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.headline3?.copyWith(
+                                      color: AppColors.blueColor,
+                                      fontSize: 40.sp,
+                                      letterSpacing: 0.6,
+                                    ),
                           ),
                           TextSpan(
                             text: 'store'.tr(),
-                            style: Theme.of(context).textTheme.headline3?.copyWith(
-                                  color: AppColors.pinkColor,
-                                  fontSize: 40.sp,
-                                  letterSpacing: 0.6,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.headline3?.copyWith(
+                                      color: AppColors.pinkColor,
+                                      fontSize: 40.sp,
+                                      letterSpacing: 0.6,
+                                    ),
                           ),
                         ],
                       ),
@@ -93,14 +112,19 @@ class GeolocationSearchProductPage extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, AppRoutes.welcomePage);
-                          context.read<LocalistaionControllerprovider>().disposeAdressValue();
+                          context
+                              .read<LocalistaionControllerprovider>()
+                              .disposeAdressValue();
                         },
                         child: Text.rich(
                           TextSpan(
                             children: <InlineSpan>[
                               TextSpan(
                                 text: 'storeSpace'.tr(),
-                                style: Theme.of(context).textTheme.headline4?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4
+                                    ?.copyWith(
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14.sp,

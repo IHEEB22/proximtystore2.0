@@ -120,7 +120,7 @@ class BusinessProvider with ChangeNotifier {
   bool get isProducFieldInFocus => _isProducFieldInFocus;
 
   Product? newProduct;
-  late String storeId;
+  String? storeId;
 
   void setNewProduct({required Product product}) {
     newProduct = product;

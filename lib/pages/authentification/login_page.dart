@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:proximitystore/config/colors/app_colors.dart';
 import 'package:proximitystore/config/routes/routes.dart';
 import 'package:proximitystore/providers/authentification_provider.dart';
+import 'package:proximitystore/utils/firebase_services.dart';
 import 'package:proximitystore/widgets/widgets.dart';
 
 import '../../services/validation_items.dart';
@@ -38,10 +40,14 @@ class _LoginPageState extends State<LoginPage> {
                           CustomBackButtonIcon(),
                           0.05.sh.verticalSpace,
                           Padding(
-                            padding: EdgeInsets.only(left: 0.0853.sw, right: 0.38.sw),
+                            padding: EdgeInsets.only(
+                                left: 0.0853.sw, right: 0.38.sw),
                             child: Text(
                               'gladToMeetYou!'.tr(),
-                              style: Theme.of(context).textTheme.headline2?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline2
+                                  ?.copyWith(
                                     fontWeight: FontWeight.w800,
                                     fontSize: 28.sp,
                                   ),
@@ -49,32 +55,54 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           0.192.sh.verticalSpace,
                           TextInputField(
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: (email) => ValidationItem(val: email).validateEmail(),
-                            controller: context.watch<AuthentificationProvider>().emailTextEditingController,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (email) =>
+                                ValidationItem(val: email).validateEmail(),
+                            controller: context
+                                .watch<AuthentificationProvider>()
+                                .emailTextEditingController,
                             hintText: 'e-mailAddress'.tr(),
                             inputLabel: 'e-mailAddress'.tr(),
                             keyboardType: TextInputType.emailAddress,
                             onChanged: (email) {
-                              context.read<AuthentificationProvider>().setEmailValide(email);
-                              context.read<AuthentificationProvider>().setIsButtonDisabled();
+                              context
+                                  .read<AuthentificationProvider>()
+                                  .setEmailValide(email);
+                              context
+                                  .read<AuthentificationProvider>()
+                                  .setIsButtonDisabled();
                             },
                           ),
                           0.03.sh.verticalSpace,
                           TextInputField(
                             inputLabel: 'password'.tr(),
-                            controller: context.watch<AuthentificationProvider>().passwordTextEditingController,
+                            controller: context
+                                .watch<AuthentificationProvider>()
+                                .passwordTextEditingController,
                             keyboardType: TextInputType.emailAddress,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            obscureText: !context.watch<AuthentificationProvider>().isPasswordVisible,
-                            validator: (email) => ValidationItem(val: email).validatePassword(),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            obscureText: !context
+                                .watch<AuthentificationProvider>()
+                                .isPasswordVisible,
+                            validator: (email) =>
+                                ValidationItem(val: email).validatePassword(),
                             onChanged: (password) {
-                              context.read<AuthentificationProvider>().setPasswordValide(password);
-                              context.read<AuthentificationProvider>().setIsButtonDisabled();
+                              context
+                                  .read<AuthentificationProvider>()
+                                  .setPasswordValide(password);
+                              context
+                                  .read<AuthentificationProvider>()
+                                  .setIsButtonDisabled();
                             },
                             suffixIcon: GestureDetector(
-                              onTap: () => context.read<AuthentificationProvider>().setIsPasswordVisible(),
-                              child: !(context.watch<AuthentificationProvider>().isPasswordVisible)
+                              onTap: () => context
+                                  .read<AuthentificationProvider>()
+                                  .setIsPasswordVisible(),
+                              child: !(context
+                                      .watch<AuthentificationProvider>()
+                                      .isPasswordVisible)
                                   ? Icon(
                                       Icons.visibility,
                                       color: AppColors.deepBlueColor,
@@ -87,7 +115,8 @@ class _LoginPageState extends State<LoginPage> {
                             hintText: 'password'.tr(),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(right: 0.052.sw, top: 0.012.sh),
+                            padding:
+                                EdgeInsets.only(right: 0.052.sw, top: 0.012.sh),
                             child: Align(
                               alignment: Alignment.topRight,
                               child: Container(
@@ -99,11 +128,16 @@ class _LoginPageState extends State<LoginPage> {
                                       context,
                                       AppRoutes.forgetPassword,
                                     );
-                                    context.read<AuthentificationProvider>().disposeControllers();
+                                    context
+                                        .read<AuthentificationProvider>()
+                                        .disposeControllers();
                                   },
                                   child: Text(
                                     'forgotYourPassword?'.tr(),
-                                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.copyWith(
                                           fontSize: 10.sp,
                                           fontFamily: 'Montserrat',
                                           decoration: TextDecoration.underline,
@@ -115,9 +149,12 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           0.198.sh.verticalSpace,
-                          context.watch<AuthentificationProvider>().isButtonDisabled
+                          context
+                                  .watch<AuthentificationProvider>()
+                                  .isButtonDisabled
                               ? Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 0.043.sw),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 0.043.sw),
                                   child: SizedBox(
                                       width: double.infinity,
                                       child: CustomGreyButton(
@@ -126,12 +163,29 @@ class _LoginPageState extends State<LoginPage> {
                                       )),
                                 )
                               : Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 0.043.sw),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 0.043.sw),
                                   child: SizedBox(
                                       width: double.infinity,
                                       child: CustomBlueButton(
-                                        onPressed: () {
-                                          Navigator.pushNamed(context, AppRoutes.storeDescriptionPage);
+                                        onPressed: () async {
+                                          String email = context
+                                              .read<AuthentificationProvider>()
+                                              .emailTextEditingController
+                                              .text;
+                                          String password = context
+                                              .read<AuthentificationProvider>()
+                                              .passwordTextEditingController
+                                              .text;
+
+                                          await FirebaseServices().signIn(
+                                              email: email,
+                                              password: password,
+                                              context: context);
+                                          print(
+                                              'user *************************************' +
+                                                  email +
+                                                  password);
                                         },
                                         textInput: 'continue'.tr(),
                                       )),
@@ -143,7 +197,10 @@ class _LoginPageState extends State<LoginPage> {
                                 children: <InlineSpan>[
                                   TextSpan(
                                     text: 'youDoNotHaveAnAccount?'.tr(),
-                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
                                           fontSize: 14.sp,
                                           // change fontfamily to montserrat
                                           color: AppColors.deepBlueColor,
@@ -157,20 +214,30 @@ class _LoginPageState extends State<LoginPage> {
                                         width: 120,
                                         child: TextButton(
                                           onPressed: () {
-                                            Navigator.pushNamed(context, AppRoutes.registerPage);
-                                            context.read<AuthentificationProvider>().disposeControllers();
+                                            Navigator.pushNamed(context,
+                                                AppRoutes.registerPage);
+                                            context
+                                                .read<
+                                                    AuthentificationProvider>()
+                                                .disposeControllers();
                                           },
                                           child: Text(
                                             // change fontfamily to montserrat
                                             'signUp'.tr(),
-                                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.copyWith(
                                                   fontSize: 15.sp,
-                                                  color: AppColors.deepBlueColor,
-                                                  decoration: TextDecoration.underline,
+                                                  color:
+                                                      AppColors.deepBlueColor,
+                                                  decoration:
+                                                      TextDecoration.underline,
                                                 ),
                                           ),
                                           style: TextButton.styleFrom(
-                                            padding: EdgeInsets.only(bottom: 0.003.sh),
+                                            padding: EdgeInsets.only(
+                                                bottom: 0.003.sh),
                                             alignment: Alignment.bottomLeft,
                                           ),
                                         ),

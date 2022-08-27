@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:proximitystore/config/images/app_images.dart';
 import 'package:proximitystore/config/routes/routes.dart';
 import 'package:proximitystore/providers/business_provider.dart';
+import 'package:proximitystore/utils/firebase_services.dart';
 import 'package:proximitystore/widgets/widgets.dart';
 
 import '../../config/colors/app_colors.dart';
@@ -36,7 +38,8 @@ class SettingsPage extends StatelessWidget {
                       CustomBackButtonIcon(),
                       Container(
                         width: 0.14.sw,
-                        padding: EdgeInsets.only(right: 0.024.sw, top: 0.018.sh),
+                        padding:
+                            EdgeInsets.only(right: 0.024.sw, top: 0.018.sh),
                         child: TextButton(
                           onPressed: () {
                             showCupertinoModalPopup(
@@ -49,10 +52,15 @@ class SettingsPage extends StatelessWidget {
                                       firstActionText: 'signOut'.tr(),
                                       secondActionText: 'deleteAccount'.tr(),
                                       firstOnPresssed: () {
-                                        Navigator.pushNamed(context, AppRoutes.loginPage);
+                                        FirebaseServices().signOut();
+                                        print(FirebaseServices()
+                                            .getCurrentUser());
+                                        Navigator.pushNamed(
+                                            context, AppRoutes.loginPage);
                                       },
                                       secondOnPresssed: () {
-                                        Navigator.pushNamed(context, AppRoutes.welcomePage);
+                                        Navigator.pushNamed(
+                                            context, AppRoutes.welcomePage);
                                       },
                                     ));
                           },
@@ -82,39 +90,55 @@ class SettingsPage extends StatelessWidget {
                   ),
                   TextInputField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (email) => ValidationItem(val: email).validateEmail(),
-                    controller: context.watch<BusinessProvider>().emailTextEditingController,
+                    validator: (email) =>
+                        ValidationItem(val: email).validateEmail(),
+                    controller: context
+                        .watch<BusinessProvider>()
+                        .emailTextEditingController,
                     hintText: 'e-mailAddress'.tr(),
                     inputLabel: 'e-mailAddress'.tr(),
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (email) {
                       context.read<BusinessProvider>().setEmailValide(email);
-                      context.read<BusinessProvider>().setIsReapetPasswordEqualNewPassword();
+                      context
+                          .read<BusinessProvider>()
+                          .setIsReapetPasswordEqualNewPassword();
                     },
                   ),
                   0.03.sh.verticalSpace,
                   TextInputField(
                     inputLabel: 'password'.tr(),
-                    controller: context.read<BusinessProvider>().passwordTextEditingController,
+                    controller: context
+                        .read<BusinessProvider>()
+                        .passwordTextEditingController,
                     keyboardType: TextInputType.emailAddress,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    obscureText: !context.watch<BusinessProvider>().isPasswordVisible,
-                    validator: (email) => ValidationItem(val: email).validatePassword(),
+                    obscureText:
+                        !context.watch<BusinessProvider>().isPasswordVisible,
+                    validator: (email) =>
+                        ValidationItem(val: email).validatePassword(),
                     onChanged: (password) {
-                      context.read<BusinessProvider>().setPasswordValide(password);
-                      context.read<BusinessProvider>().setIsReapetPasswordEqualNewPassword();
+                      context
+                          .read<BusinessProvider>()
+                          .setPasswordValide(password);
+                      context
+                          .read<BusinessProvider>()
+                          .setIsReapetPasswordEqualNewPassword();
                     },
                     suffixIcon: GestureDetector(
-                      onTap: () => context.read<BusinessProvider>().setIsPasswordVisible(),
-                      child: !(context.watch<BusinessProvider>().isPasswordVisible)
-                          ? Icon(
-                              Icons.visibility,
-                              color: AppColors.deepBlueColor,
-                            )
-                          : Icon(
-                              Icons.visibility_off,
-                              color: AppColors.deepBlueColor,
-                            ),
+                      onTap: () => context
+                          .read<BusinessProvider>()
+                          .setIsPasswordVisible(),
+                      child:
+                          !(context.watch<BusinessProvider>().isPasswordVisible)
+                              ? Icon(
+                                  Icons.visibility,
+                                  color: AppColors.deepBlueColor,
+                                )
+                              : Icon(
+                                  Icons.visibility_off,
+                                  color: AppColors.deepBlueColor,
+                                ),
                     ),
                     hintText: 'password'.tr(),
                   ),
@@ -137,19 +161,31 @@ class SettingsPage extends StatelessWidget {
                   0.03.sh.verticalSpace,
                   TextInputField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (repeatPassword) => ValidationItem(val: repeatPassword).validatePassword(),
-                    controller: context.read<BusinessProvider>().newPasswordTextEditingController,
+                    validator: (repeatPassword) =>
+                        ValidationItem(val: repeatPassword).validatePassword(),
+                    controller: context
+                        .read<BusinessProvider>()
+                        .newPasswordTextEditingController,
                     inputLabel: 'newPassword'.tr(),
                     hintText: 'newPassword'.tr(),
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (password) {
-                      context.read<BusinessProvider>().setNewPasswordValide(password);
-                      context.read<BusinessProvider>().setIsReapetPasswordEqualNewPassword();
+                      context
+                          .read<BusinessProvider>()
+                          .setNewPasswordValide(password);
+                      context
+                          .read<BusinessProvider>()
+                          .setIsReapetPasswordEqualNewPassword();
                     },
-                    obscureText: !context.watch<BusinessProvider>().isNewPasswordVisible,
+                    obscureText:
+                        !context.watch<BusinessProvider>().isNewPasswordVisible,
                     suffixIcon: GestureDetector(
-                      onTap: () => context.read<BusinessProvider>().setIsNewPasswordVisible(),
-                      child: !(context.watch<BusinessProvider>().isNewPasswordVisible)
+                      onTap: () => context
+                          .read<BusinessProvider>()
+                          .setIsNewPasswordVisible(),
+                      child: !(context
+                              .watch<BusinessProvider>()
+                              .isNewPasswordVisible)
                           ? Icon(
                               Icons.visibility,
                               color: AppColors.deepBlueColor,
@@ -163,19 +199,32 @@ class SettingsPage extends StatelessWidget {
                   0.03.sh.verticalSpace,
                   TextInputField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (repeatPassword) => ValidationItem(val: repeatPassword).validatePassword(),
-                    controller: context.read<BusinessProvider>().repeatNewPasswordTextEditingController,
+                    validator: (repeatPassword) =>
+                        ValidationItem(val: repeatPassword).validatePassword(),
+                    controller: context
+                        .read<BusinessProvider>()
+                        .repeatNewPasswordTextEditingController,
                     inputLabel: 'confirmTheNewPassword'.tr(),
                     hintText: 'confirmTheNewPassword'.tr(),
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (password) {
-                      context.read<BusinessProvider>().setRepaetNewPasswordValide(password);
-                      context.read<BusinessProvider>().setIsReapetPasswordEqualNewPassword();
+                      context
+                          .read<BusinessProvider>()
+                          .setRepaetNewPasswordValide(password);
+                      context
+                          .read<BusinessProvider>()
+                          .setIsReapetPasswordEqualNewPassword();
                     },
-                    obscureText: !context.watch<BusinessProvider>().isRepeatNewPasswordVisible,
+                    obscureText: !context
+                        .watch<BusinessProvider>()
+                        .isRepeatNewPasswordVisible,
                     suffixIcon: GestureDetector(
-                      onTap: () => context.read<BusinessProvider>().setIsRepeatNewPasswordVisible(),
-                      child: !(context.watch<BusinessProvider>().isRepeatNewPasswordVisible)
+                      onTap: () => context
+                          .read<BusinessProvider>()
+                          .setIsRepeatNewPasswordVisible(),
+                      child: !(context
+                              .watch<BusinessProvider>()
+                              .isRepeatNewPasswordVisible)
                           ? Icon(
                               Icons.visibility,
                               color: AppColors.deepBlueColor,
@@ -198,24 +247,29 @@ class SettingsPage extends StatelessWidget {
                             context,
                             AppRoutes.termOfServicePage,
                           );
-                          context.read<BusinessProvider>().disposeSettingsControllers();
+                          context
+                              .read<BusinessProvider>()
+                              .disposeSettingsControllers();
                         },
                         style: TextButton.styleFrom(),
                         child: Text(
                           'consultTheT&Cs'.tr(),
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                                fontSize: 10.sp,
-                                fontFamily: 'Montserrat',
-                                decoration: TextDecoration.underline,
-                                color: AppColors.deepBlueColor,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyText1?.copyWith(
+                                    fontSize: 10.sp,
+                                    fontFamily: 'Montserrat',
+                                    decoration: TextDecoration.underline,
+                                    color: AppColors.deepBlueColor,
+                                  ),
                         ),
                       ),
                     ),
                   ),
                   0.102.sh.verticalSpace,
                   (context.watch<BusinessProvider>().isEmailValide &&
-                          context.watch<BusinessProvider>().isReapetPasswordEqualpassword &&
+                          context
+                              .watch<BusinessProvider>()
+                              .isReapetPasswordEqualpassword &&
                           context.watch<BusinessProvider>().isPasswordValide)
                       ? Padding(
                           padding: EdgeInsets.symmetric(horizontal: 0.043.sw),

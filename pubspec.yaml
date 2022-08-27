@@ -49,6 +49,8 @@ dependencies:
   autocomplete_textfield: ^2.0.1
   firebase_core: ^1.21.0
   cloud_firestore: ^3.4.6
+  firebase_auth: ^3.7.0
+  fluttertoast: ^8.0.9
   # auto_size_text: ^3.0.0
 
 dev_dependencies:
