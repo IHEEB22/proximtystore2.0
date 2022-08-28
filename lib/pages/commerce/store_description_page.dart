@@ -686,6 +686,10 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                         .chekedsectorsList
                                                         .isNotEmpty) {
                                               print('you can navigate');
+                                              final String storeName = context
+                                                  .read<BusinessProvider>()
+                                                  .businessName
+                                                  .text;
                                               final docStore = FirebaseFirestore
                                                   .instance
                                                   .collection('stores')
@@ -694,7 +698,7 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                   storeOwnerId: user.uid,
                                                   storeId: docStore.id,
                                                   storeSectors: [],
-                                                  storeName: '',
+                                                  storeName: storeName,
                                                   storeLocation: '');
                                               await docStore
                                                   .set(newStore.toJson());
@@ -703,6 +707,14 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                   .read<BusinessProvider>()
                                                   .setNewStore(
                                                       store: newStore.storeId);
+                                              final docUser = FirebaseFirestore
+                                                  .instance
+                                                  .collection('users')
+                                                  .doc(user.uid);
+                                              await docUser.update({
+                                                'store_id': docStore.id,
+                                                'has_store': true,
+                                              });
 
                                               context
                                                   .read<

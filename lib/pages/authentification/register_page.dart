@@ -237,10 +237,6 @@ class RegisterPage extends StatelessWidget {
                                               email: email,
                                               password: password,
                                               context: context);
-
-                                          context
-                                              .read<AuthentificationProvider>()
-                                              .disposeControllers();
                                         },
                                         textInput: 'continue'.tr(),
                                       )),

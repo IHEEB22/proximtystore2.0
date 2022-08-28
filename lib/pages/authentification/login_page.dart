@@ -169,11 +169,11 @@ class _LoginPageState extends State<LoginPage> {
                                       width: double.infinity,
                                       child: CustomBlueButton(
                                         onPressed: () async {
-                                          String email = context
+                                          final String email = context
                                               .read<AuthentificationProvider>()
                                               .emailTextEditingController
                                               .text;
-                                          String password = context
+                                          final String password = context
                                               .read<AuthentificationProvider>()
                                               .passwordTextEditingController
                                               .text;

@@ -1,16 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:proximitystore/models/user.dart';
+import 'package:provider/provider.dart';
+import 'package:proximitystore/models/custom_user.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:proximitystore/config/colors/app_colors.dart';
 import 'package:proximitystore/config/routes/routes.dart';
 
-class FirebaseServices {
-  FirebaseAuth auth = FirebaseAuth.instance;
+import '../providers/authentification_provider.dart';
 
+class FirebaseServices {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+// CustomUser _userFromFirebaseUser(FirebaseUser user){
+//   return
+// }
   Future signIn(
       {required String email,
       required String password,
@@ -18,7 +24,7 @@ class FirebaseServices {
     String errorMessage = '';
 
     try {
-      await auth.signInWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(
           email: email.trim(), password: password.trim());
       print(
         'user' + email.trim() + '  ' + password.trim(),
@@ -64,23 +70,27 @@ class FirebaseServices {
     String errorMessage = '';
 
     try {
-      await auth.createUserWithEmailAndPassword(
+      UserCredential newUser = await _auth.createUserWithEmailAndPassword(
           email: email.trim(), password: password.trim());
       print(
         'user' + email.trim() + '  ' + password.trim(),
       );
-
-      final docUser = FirebaseFirestore.instance.collection('users').doc();
-      final CustomUser registredUser = CustomUser(
-          userId: docUser.id.toString(),
-          email: email,
-          password: password,
-          timeStamp: DateTime.now());
-      await docUser.set(registredUser.toJson());
-      Navigator.pushNamed(context, AppRoutes.loginPage);
+      if (newUser.user != null) {
+        final docUser = FirebaseFirestore.instance
+            .collection('users')
+            .doc(newUser.user!.uid);
+        final CustomUser registredUser = CustomUser(
+            userId: newUser.user!.uid,
+            email: email,
+            password: password,
+            timeStamp: DateTime.now());
+        await docUser.set(registredUser.toJson());
+        context.read<AuthentificationProvider>().disposeControllers();
+        Navigator.pushNamed(context, AppRoutes.loginPage);
+      }
     } on FirebaseAuthException catch (error) {
-      switch (error.message) {
-        case "The email address is already in use by another account":
+      switch (error.code) {
+        case "email-already-in-use":
           errorMessage =
               "The email address is already in use by another account";
           break;
@@ -98,10 +108,10 @@ class FirebaseServices {
   }
 
   Future signOut() async {
-    await auth.signOut();
+    await _auth.signOut();
   }
 
   Stream<User?> getCurrentUser() {
-    return auth.authStateChanges();
+    return _auth.authStateChanges();
   }
 }
