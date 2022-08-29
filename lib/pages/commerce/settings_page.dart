@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:proximitystore/config/images/app_images.dart';
 import 'package:proximitystore/config/routes/routes.dart';
 import 'package:proximitystore/providers/business_provider.dart';
-import 'package:proximitystore/utils/firebase_services.dart';
+import 'package:proximitystore/utils/firebase_auth_services.dart';
 import 'package:proximitystore/widgets/widgets.dart';
 
 import '../../config/colors/app_colors.dart';
@@ -52,9 +52,11 @@ class SettingsPage extends StatelessWidget {
                                       firstActionText: 'signOut'.tr(),
                                       secondActionText: 'deleteAccount'.tr(),
                                       firstOnPresssed: () {
-                                        FirebaseServices().signOut();
-                                        print(FirebaseServices()
-                                            .getCurrentUser());
+                                        // print(FirebaseAuthServices()
+                                        //     .getSingedInUser()!
+                                        //     .email);
+                                        FirebaseAuthServices().signOut();
+
                                         Navigator.pushNamed(
                                             context, AppRoutes.loginPage);
                                       },

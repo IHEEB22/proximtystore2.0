@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proximitystore/config/colors/app_colors.dart';
 
-import '../../utils/firebase_services.dart';
-import '../pages.dart';
+import '../utils/firebase_auth_services.dart';
+import '../pages/pages.dart';
 
 class WelcomePageWrapper extends StatefulWidget {
   const WelcomePageWrapper({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class _WelcomePageWrapperState extends State<WelcomePageWrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<User?>(
-        stream: FirebaseServices().getCurrentUser(),
+        stream: FirebaseAuthServices().getCurrentUser(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return StoreDescriptionPage();

@@ -11,7 +11,7 @@ import 'package:proximitystore/config/routes/routes.dart';
 
 import '../providers/authentification_provider.dart';
 
-class FirebaseServices {
+class FirebaseAuthServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
 // CustomUser _userFromFirebaseUser(FirebaseUser user){
@@ -29,7 +29,7 @@ class FirebaseServices {
       print(
         'user' + email.trim() + '  ' + password.trim(),
       );
-      Navigator.pushNamed(context, AppRoutes.storeDescriptionPage);
+      Navigator.pushNamed(context, AppRoutes.loginPageWrapper);
     } on FirebaseAuthException catch (error) {
       switch (error.code) {
         case "invalid-email":
@@ -80,10 +80,11 @@ class FirebaseServices {
             .collection('users')
             .doc(newUser.user!.uid);
         final CustomUser registredUser = CustomUser(
-            userId: newUser.user!.uid,
-            email: email,
-            password: password,
-            timeStamp: DateTime.now());
+          userId: newUser.user!.uid,
+          email: email,
+          password: password,
+          timeStamp: DateTime.now().toString(),
+        );
         await docUser.set(registredUser.toJson());
         context.read<AuthentificationProvider>().disposeControllers();
         Navigator.pushNamed(context, AppRoutes.loginPage);
@@ -110,6 +111,8 @@ class FirebaseServices {
   Future signOut() async {
     await _auth.signOut();
   }
+
+  // User? getSingedInUser() => _auth.currentUser;
 
   Stream<User?> getCurrentUser() {
     return _auth.authStateChanges();

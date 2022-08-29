@@ -111,7 +111,8 @@ class GeolocationSearchProductPage extends StatelessWidget {
                     children: <Widget>[
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, AppRoutes.welcomePage);
+                          Navigator.pushNamed(
+                              context, AppRoutes.welcomePageWrapper);
                           context
                               .read<LocalistaionControllerprovider>()
                               .disposeAdressValue();

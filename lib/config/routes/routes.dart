@@ -18,6 +18,8 @@ class AppRoutes {
   static const String loginPage = '/loginPage';
   static const String loginPageWrapper = '/loginPageWrapper';
   static const String welcomePageWrapper = '/welcomePageWrapper';
+  static const String storeDescriptionPageWrapper =
+      '/storeDescriptionPageWrapper';
   static const String welcomePage = '/welcomePage';
   static const String forgetPassword = '/forgetPassword';
   static const String resetPassword = '/resetPassword';
@@ -81,6 +83,9 @@ class AppRoutes {
         return CustomPageRoute(Route: LoginPageWrapper(), settings: settings);
       case welcomePageWrapper:
         return CustomPageRoute(Route: LoginPageWrapper(), settings: settings);
+      case storeDescriptionPageWrapper:
+        return CustomPageRoute(
+            Route: StoreDescriptionPageWrapper(), settings: settings);
       default:
         throw ('this route name does not exist');
     }
