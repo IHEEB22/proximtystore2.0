@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:proximitystore/config/colors/app_colors.dart';
 import 'package:proximitystore/config/routes/routes.dart';
+import 'package:proximitystore/utils/firebase_firestore_services.dart';
 
 import '../providers/authentification_provider.dart';
 
@@ -76,16 +77,13 @@ class FirebaseAuthServices {
         'user' + email.trim() + '  ' + password.trim(),
       );
       if (newUser.user != null) {
-        final docUser = FirebaseFirestore.instance
-            .collection('users')
-            .doc(newUser.user!.uid);
         final CustomUser registredUser = CustomUser(
           userId: newUser.user!.uid,
           email: email,
           password: password,
           timeStamp: DateTime.now().toString(),
         );
-        await docUser.set(registredUser.toJson());
+        FireStoreServices().createUser(newUser: registredUser);
         context.read<AuthentificationProvider>().disposeControllers();
         Navigator.pushNamed(context, AppRoutes.loginPage);
       }
@@ -112,7 +110,7 @@ class FirebaseAuthServices {
     await _auth.signOut();
   }
 
-  // User? getSingedInUser() => _auth.currentUser;
+  User? getSingedInUser() => _auth.currentUser;
 
   Stream<User?> getCurrentUser() {
     return _auth.authStateChanges();

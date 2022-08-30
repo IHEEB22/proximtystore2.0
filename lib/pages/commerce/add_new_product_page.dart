@@ -19,6 +19,7 @@ import 'package:proximitystore/providers/client_provider.dart';
 import '../../config/colors/app_colors.dart';
 import '../../providers/business_provider.dart';
 import '../../services/validation_items.dart';
+import '../../utils/firebase_firestore_services.dart';
 import '../../widgets/custom_blue_button.dart';
 import '../../widgets/custom_cupertino_dialog.dart';
 import '../../widgets/custom_grey_button.dart';
@@ -298,10 +299,10 @@ class AddNewProductPage extends StatelessWidget {
                                       width: double.infinity,
                                       child: CustomBlueButton(
                                         onPressed: () async {
-                                          String storeConnected = context
+                                          String storeIdConnected = context
                                                   .read<BusinessProvider>()
-                                                  .storeId ??
-                                              'no store created yet';
+                                                  .storeIdConnected ??
+                                              'no store created yet ';
                                           Product newProduct = Product(
                                             productName: context
                                                 .read<BusinessProvider>()
@@ -315,46 +316,9 @@ class AddNewProductPage extends StatelessWidget {
                                                 .text),
                                             productStatus: 'en attente',
                                           );
-                                          final docStoreConnected =
-                                              FirebaseFirestore.instance
-                                                  .collection('stores')
-                                                  .doc(storeConnected);
-                                          await docStoreConnected
-                                              .collection('products')
-                                              .doc(newProduct.productName)
-                                              .set(newProduct.toJson());
-                                          // Store storeConected = context
-                                          //     .read<BusinessProvider>()
-                                          //     .newStore;
-                                          // storeConected.addProduct(
-                                          //     product: newProduct);
+                                          FireStoreServices().createProduct(
+                                              storeIdConnected, newProduct);
 
-                                          // FirebaseFirestore.instance
-                                          //     .collection('stores')
-                                          //     .doc(context
-                                          //         .read<BusinessProvider>()
-                                          //         .newStore
-                                          //         .storeID)
-                                          //     .collection('products')
-                                          //     .add(newProduct.toJson());
-                                          // context
-                                          //     .read<BusinessProvider>()
-                                          //     .setNewProduct(
-                                          //         product: Product(
-                                          //       productName: context
-                                          //           .read<BusinessProvider>()
-                                          //           .productDescription
-                                          //           .text,
-                                          //       productImage:
-                                          //           'https://s3-alpha-sig.figma.com/img/c13b/964f/6f86b440c9e16b24fc61c51efd573da6?Expires=1660521600&Signature=IiPpfiJ0ZWJRqxp3qMkXQU381h9rcFv7DfRA6wbmVTN6czBGq70uS~QLWq12b80we9iPNizsUrq5JViuxTOm4dQxSFq5HHj64e-d1QjJ8eiy8SGMJboYyM2lhq-rmuCRrIuxMLnslL4h~Z5Kj9agcqmucLDJ~9H4AGxnbonI65-cpXrfZWv95Y-UycpnOOa0Resf5MUI9xPaK7X4~W~VJIagxPd0hycpeJUkBpWW6EgZfGxwOWvu7jVySmxt1elGZjEtItjHketmmVX0-lyG9o6Om7MaEx3k6JrnbkfaMbI-cUesed5fWWeYfNrnBytF3AiW~ePy6mCO2I4hFAK6qQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
-                                          //       productPrice: double.parse(
-                                          //           context
-                                          //               .read<
-                                          //                   BusinessProvider>()
-                                          //               .productPrice
-                                          //               .text),
-                                          //       productStatus: 'en attente',
-                                          //     ));
                                           Navigator.pushNamed(context,
                                               AppRoutes.searchProductPage,
                                               arguments: {

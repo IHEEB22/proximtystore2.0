@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proximitystore/models/product.dart';
+import 'package:proximitystore/utils/firebase_auth_services.dart';
 
 import '../models/sector.dart';
 import '../models/store.dart';
@@ -120,15 +122,15 @@ class BusinessProvider with ChangeNotifier {
   bool get isProducFieldInFocus => _isProducFieldInFocus;
 
   Product? newProduct;
-  String? storeId;
+  String? storeIdConnected;
 
   void setNewProduct({required Product product}) {
     newProduct = product;
     notifyListeners();
   }
 
-  void setNewStore({required String store}) {
-    storeId = store;
+  void setStoreIdConnected({required String storeId}) {
+    storeIdConnected = storeId;
     notifyListeners();
   }
 

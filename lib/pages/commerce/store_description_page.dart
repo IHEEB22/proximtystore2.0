@@ -15,6 +15,7 @@ import 'package:proximitystore/config/colors/app_colors.dart';
 import 'package:proximitystore/config/routes/routes.dart';
 import 'package:proximitystore/models/store.dart';
 import 'package:proximitystore/utils/firebase_auth_services.dart';
+import 'package:proximitystore/utils/firebase_firestore_services.dart';
 import 'package:proximitystore/widgets/sheet_store_sectors.dart';
 import 'package:proximitystore/providers/business_provider.dart';
 import 'package:proximitystore/providers/client_provider.dart';
@@ -36,7 +37,7 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
   final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser!;
+    final singedInUser = FirebaseAuthServices().getSingedInUser()!;
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -687,35 +688,18 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                         .chekedsectorsList
                                                         .isNotEmpty) {
                                               print('you can navigate');
+
                                               final String storeName = context
                                                   .read<BusinessProvider>()
                                                   .businessName
                                                   .text;
-                                              final docStore = FirebaseFirestore
-                                                  .instance
-                                                  .collection('stores')
-                                                  .doc();
-                                              final Store newStore = Store(
-                                                  storeOwnerId: user.uid,
-                                                  storeId: docStore.id,
-                                                  storeSectors: [],
-                                                  storeName: storeName,
-                                                  storeLocation: '');
-                                              await docStore
-                                                  .set(newStore.toJson());
-                                              print(newStore.storeId);
-                                              context
-                                                  .read<BusinessProvider>()
-                                                  .setNewStore(
-                                                      store: newStore.storeId);
-                                              final docUser = FirebaseFirestore
-                                                  .instance
-                                                  .collection('users')
-                                                  .doc(user.uid);
-                                              await docUser.update({
-                                                'store_id': docStore.id,
-                                                'has_store': true,
-                                              });
+
+                                              FireStoreServices().createStore(
+                                                storeOwnerId: singedInUser.uid,
+                                                storeName: storeName,
+                                                storeLocation: "storeLocation",
+                                                context: context,
+                                              );
 
                                               context
                                                   .read<

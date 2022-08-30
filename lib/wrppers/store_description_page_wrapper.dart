@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proximitystore/models/custom_user.dart';
 import 'package:proximitystore/utils/firebase_auth_services.dart';
+import 'package:proximitystore/utils/firebase_firestore_services.dart';
 import '../pages/pages.dart';
 
 class StoreDescriptionPageWrapper extends StatefulWidget {
@@ -19,16 +20,11 @@ class _StoreDescriptionPageWrapperState
     extends State<StoreDescriptionPageWrapper> {
   @override
   Widget build(BuildContext context) {
-    final singedInUserId = FirebaseAuth.instance.currentUser!;
+    final singedInUserId = FirebaseAuthServices().getSingedInUser()!;
     print(singedInUserId);
     return Scaffold(
-      body: StreamBuilder<List<CustomUser>>(
-          stream: FirebaseFirestore.instance
-              .collection('users')
-              .snapshots()
-              .map((snapshot) => snapshot.docs
-                  .map((doc) => CustomUser.fromJson(doc.data()))
-                  .toList()),
+      body: StreamBuilder<List<CustomUser>?>(
+          stream: FireStoreServices().getUserDocs(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               print(snapshot.data);
