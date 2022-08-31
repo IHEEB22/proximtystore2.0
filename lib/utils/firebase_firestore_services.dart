@@ -9,6 +9,7 @@ import 'package:proximitystore/providers/business_provider.dart';
 class FireStoreServices {
   final storeCollection = FirebaseFirestore.instance.collection('stores');
   final userCollection = FirebaseFirestore.instance.collection('users');
+  final productCollection = FirebaseFirestore.instance.collection('products');
   void createUser({required CustomUser newUser}) async {
     final docUser = userCollection.doc(newUser.userId);
 
@@ -46,6 +47,11 @@ class FireStoreServices {
         .collection('products')
         .doc(newProduct.productName)
         .set(newProduct.toJson());
+
+    // add the product to separated collection named products
+    await productCollection
+        .doc(newProduct.productName)
+        .set(newProduct.toJson());
   }
 
   Stream<List<CustomUser>?> getUserDocs() =>
@@ -53,4 +59,5 @@ class FireStoreServices {
           snapshot.docs.map((doc) => CustomUser.fromJson(doc.data())).toList());
 
   // create query to get user has store proprety && dispose connectedStoreId when the user sign out
+
 }

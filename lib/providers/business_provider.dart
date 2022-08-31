@@ -135,6 +135,11 @@ class BusinessProvider with ChangeNotifier {
   }
 
   Future<List<Product>> getProductSuggestion(String query) async {
+    // final result = FireStoreServices()
+    //     .getUserProducts(storeIdConnected!)
+    //     .firstWhere((val) => false);
+
+    // List data = await json.decode(result);
     final String response =
         await rootBundle.loadString('assets/fake_data/products.json');
 

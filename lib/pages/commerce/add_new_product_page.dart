@@ -129,9 +129,9 @@ class AddNewProductPage extends StatelessWidget {
                           inputLabel: 'productDescription'.tr(),
                           keyboardType: TextInputType.multiline,
                           validator: (val) {
-                            if ((val == null) || ((val ?? '').isEmpty)) {
+                            if (val == null || val.isEmpty) {
                               return "ce champ est obligatoire !";
-                            } else if ((val ?? '').length < 8) {
+                            } else if (val.length < 8) {
                               return "Description trés court";
                             } else {
                               return null;

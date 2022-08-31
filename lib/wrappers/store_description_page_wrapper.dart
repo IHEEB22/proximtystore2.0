@@ -24,14 +24,14 @@ class _StoreDescriptionPageWrapperState
     print(singedInUserId);
     return Scaffold(
       body: StreamBuilder<List<CustomUser>?>(
-          stream: FireStoreServices().getUserDocs(),
+          stream: FireStoreServices().getUserStoreId(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               print(snapshot.data);
               CustomUser logedInUser = snapshot.data!
                   .where((user) => user.userId == singedInUserId.uid)
                   .toList()
-                  .first;
+                  .single;
               if (logedInUser.hasStore ?? false) {
                 return SearchProductPage();
               } else {

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:proximitystore/config/colors/app_colors.dart';
 import 'package:proximitystore/config/routes/routes.dart';
+import 'package:proximitystore/pages/authentification/reset_password.dart';
 import 'package:proximitystore/utils/firebase_firestore_services.dart';
 
 import '../providers/authentification_provider.dart';
@@ -115,4 +116,23 @@ class FirebaseAuthServices {
   Stream<User?> getCurrentUser() {
     return _auth.authStateChanges();
   }
+
+  // also create a popup (on the verivy email page)to enter the verification code (resendcode button)
+
+//   Future requestResetPassword(String email) async {
+//     await _auth.sendPasswordResetEmail(email: email);
+//   }
+
+//  Future <bool> checkRequestcode(String code) async {
+//     try {
+//       await _auth.checkActionCode(code);
+//       await _auth.applyActionCode(code);
+//       return true;
+//     } on FirebaseAuthException catch (e) {
+//       if (e.code == 'invalid-action-code') {
+//         print('The code is invalid.');
+//       }
+//       return false;
+//     }
+//   }
 }

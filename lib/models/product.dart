@@ -32,9 +32,9 @@ class Product {
     );
   }
   Map<String, dynamic> toJson() => {
-        'product_Name': productName,
+        'product_name': productName,
         'product_image': productImage,
-        'product_Price': productPrice,
+        'product_price': productPrice,
         'product_status': productStatus,
       };
 }
