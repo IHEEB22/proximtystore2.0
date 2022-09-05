@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:proximitystore/pages/commerce/terms_of_service_page.dart';
 import 'package:proximitystore/pages/pages.dart';
 import 'package:proximitystore/widgets/custom_page_route.dart';
+import 'package:proximitystore/wrappers/store_description_page_wrapper.dart';
+import 'package:proximitystore/wrappers/login_page_wrapper.dart';
+import 'package:proximitystore/wrappers/welcome_page_wrapper.dart';
 
 class AppRoutes {
   static const String geoLocationOffPage = '/geoLocationOffPage';
@@ -82,7 +85,7 @@ class AppRoutes {
       case loginPageWrapper:
         return CustomPageRoute(Route: LoginPageWrapper(), settings: settings);
       case welcomePageWrapper:
-        return CustomPageRoute(Route: LoginPageWrapper(), settings: settings);
+        return CustomPageRoute(Route: WelcomePageWrapper(), settings: settings);
       case storeDescriptionPageWrapper:
         return CustomPageRoute(
             Route: StoreDescriptionPageWrapper(), settings: settings);

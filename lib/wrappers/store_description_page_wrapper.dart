@@ -20,16 +20,16 @@ class _StoreDescriptionPageWrapperState
     extends State<StoreDescriptionPageWrapper> {
   @override
   Widget build(BuildContext context) {
-    final singedInUserId = FirebaseAuthServices().getSingedInUser()!;
+    final singedInUserId = FirebaseAuth.instance.currentUser!.uid;
     print(singedInUserId);
     return Scaffold(
-      body: StreamBuilder<List<CustomUser>?>(
-          stream: FireStoreServices().getUserStoreId(),
+      body: StreamBuilder<List<CustomUser>>(
+          stream: FireStoreServices().getUsers(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               print(snapshot.data);
               CustomUser logedInUser = snapshot.data!
-                  .where((user) => user.userId == singedInUserId.uid)
+                  .where((user) => user.userId == singedInUserId)
                   .toList()
                   .single;
               if (logedInUser.hasStore ?? false) {

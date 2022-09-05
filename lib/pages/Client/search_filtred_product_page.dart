@@ -9,6 +9,7 @@ import '../../config/colors/app_colors.dart';
 import '../../providers/business_provider.dart';
 import '../../providers/client_provider.dart';
 
+import '../../widgets/sheet_store_sectors.dart';
 import '../../widgets/widgets.dart';
 import '../pages.dart';
 
@@ -64,20 +65,29 @@ class SearchFiltredProductPage extends StatelessWidget {
                                   )),
                             ).then(
                               (value) {
-                                context.read<ClientProvider>().setHideSuggestion();
+                                context
+                                    .read<ClientProvider>()
+                                    .setHideSuggestion();
                               },
                             );
                           },
-                          child: !context.read<BusinessProvider>().isDeleteEnabled()
+                          child: !context
+                                  .read<BusinessProvider>()
+                                  .isDeleteEnabled()
                               ? Padding(
                                   padding: EdgeInsets.only(top: 0.026.sh),
-                                  child:
-                                      Image(height: 0.03.sh, width: 0.065.sw, image: AssetImage(AppImages.filterIcon)),
+                                  child: Image(
+                                      height: 0.03.sh,
+                                      width: 0.065.sw,
+                                      image: AssetImage(AppImages.filterIcon)),
                                 )
                               : Padding(
                                   padding: EdgeInsets.only(top: 0.01.sh),
                                   child: Image(
-                                      height: 0.06.sh, width: 0.072.sw, image: AssetImage(AppImages.filterSelected)),
+                                      height: 0.06.sh,
+                                      width: 0.072.sw,
+                                      image:
+                                          AssetImage(AppImages.filterSelected)),
                                 ),
                         ),
                       ),
@@ -92,7 +102,11 @@ class SearchFiltredProductPage extends StatelessWidget {
                           width: double.infinity,
                           child: Wrap(
                             direction: Axis.horizontal,
-                            children: context.read<BusinessProvider>().chekedsectorsList.keys.map((item) {
+                            children: context
+                                .read<BusinessProvider>()
+                                .chekedsectorsList
+                                .keys
+                                .map((item) {
                               return Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -102,38 +116,58 @@ class SearchFiltredProductPage extends StatelessWidget {
                                       margin: EdgeInsets.all(3),
                                       padding: EdgeInsets.all(2),
                                       decoration: BoxDecoration(
-                                        border: Border.all(width: 2, color: AppColors.deepBlueColor),
+                                        border: Border.all(
+                                            width: 2,
+                                            color: AppColors.deepBlueColor),
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(6.0),
                                         ),
                                       ),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(top: 4, bottom: 4, right: 1.5, left: 2),
+                                            padding: EdgeInsets.only(
+                                                top: 4,
+                                                bottom: 4,
+                                                right: 1.5,
+                                                left: 2),
                                             child: Text(
                                               item,
-                                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                                  fontFamily: 'Montserrat',
-                                                  fontSize: 12.sp,
-                                                  color: AppColors.deepBlueColor,
-                                                  fontWeight: FontWeight.w700),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                      fontFamily: 'Montserrat',
+                                                      fontSize: 12.sp,
+                                                      color: AppColors
+                                                          .deepBlueColor,
+                                                      fontWeight:
+                                                          FontWeight.w700),
                                             ),
                                           ),
                                           GestureDetector(
                                             onTap: () {
-                                              context.read<BusinessProvider>().removeSector(item);
-                                              context.read<BusinessProvider>().isDeleteEnabled();
+                                              context
+                                                  .read<BusinessProvider>()
+                                                  .removeSector(item);
+                                              context
+                                                  .read<BusinessProvider>()
+                                                  .isDeleteEnabled();
                                               context
                                                   .read<ClientProvider>()
-                                                  .getProductSuggestion(query: 'd', context: context);
+                                                  .getProductSuggestion(
+                                                      query: 'd',
+                                                      context: context);
                                             },
                                             child: Container(
                                               height: 16,
                                               width: 16,
-                                              child: Image(image: AssetImage('assets/icons/delete_icon.png')),
+                                              child: Image(
+                                                  image: AssetImage(
+                                                      'assets/icons/delete_icon.png')),
                                             ),
                                           ),
                                           0.0025.sw.horizontalSpace,

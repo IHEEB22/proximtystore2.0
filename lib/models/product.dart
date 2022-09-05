@@ -17,20 +17,20 @@ class Product {
     this.productStatus,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    final productName = json['product_name'] as String;
+  static Product fromJson(Map<String, dynamic> json) {
+    final productName = json['product_Name'] as String;
     final productImage = json['product_image'] as String;
-    final productPrice = json['product_price'] as double;
-    final storeFarDestination = json['store_far_destination'] as String?;
+    final productPrice = json['product_Price'] as double;
     final productStatus = json['product_status'] as String?;
 
     return Product(
       productName: productName,
       productImage: productImage,
       productPrice: productPrice,
-      productStatus: productStatus,
+      productStatus: productStatus ?? 'en attente',
     );
   }
+
   Map<String, dynamic> toJson() => {
         'product_name': productName,
         'product_image': productImage,

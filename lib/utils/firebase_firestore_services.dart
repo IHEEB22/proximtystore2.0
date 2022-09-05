@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proximitystore/models/custom_user.dart';
 import 'package:proximitystore/models/product.dart';
 import 'package:proximitystore/models/store.dart';
-import 'package:proximitystore/providers/business_provider.dart';
+import 'package:proximitystore/utils/firebase_auth_services.dart';
 
 class FireStoreServices {
   final storeCollection = FirebaseFirestore.instance.collection('stores');
@@ -17,14 +16,13 @@ class FireStoreServices {
   }
 
   void createStore({
-    required BuildContext context,
-    required String storeOwnerId,
+    required String storeOwner,
     required String storeName,
     required String storeLocation,
   }) async {
     final docStore = storeCollection.doc();
     final Store newStore = Store(
-        storeOwnerId: storeOwnerId,
+        storeOwnerId: storeOwner,
         storeId: docStore.id,
         storeSectors: [],
         storeName: storeName,
@@ -32,12 +30,12 @@ class FireStoreServices {
     await docStore.set(newStore.toJson());
 
     // update user data
-    final docUser = userCollection.doc(storeOwnerId);
+
+    final docUser = userCollection.doc(storeOwner);
     await docUser.update({
       'store_id': docStore.id,
       'has_store': true,
     });
-    context.read<BusinessProvider>().setStoreIdConnected(storeId: docStore.id);
   }
 
   void createProduct(String storeConnected, Product newProduct) async {
@@ -54,10 +52,69 @@ class FireStoreServices {
         .set(newProduct.toJson());
   }
 
-  Stream<List<CustomUser>?> getUserDocs() =>
-      userCollection.snapshots().map((snapshot) =>
-          snapshot.docs.map((doc) => CustomUser.fromJson(doc.data())).toList());
+  // Future<CustomUser> getSignedInUser() async {
+  //   print('********************************************');
 
-  // create query to get user has store proprety && dispose connectedStoreId when the user sign out
+  //   return await userCollection
+  //       .snapshots()
+  //       .map((snapshot) => snapshot.docs
+  //           .map((doc) => CustomUser.fromJson(doc.data()))
+  //           .toList()
+  //           .where((user) =>
+  //               user.userId == FirebaseAuthServices().currentUser()!.uid)
+  //           .toList()
+  //           .single)
+  //       .single;
+  // }
 
+  Stream<List<CustomUser>> getUsers() =>
+      userCollection.snapshots().map((snapshot) => snapshot.docs
+          .map((doc) => CustomUser.fromJson(doc.data()))
+          .toList()
+          .where(
+              (user) => user.userId == FirebaseAuth.instance.currentUser!.uid)
+          .toList());
+
+  Stream<String> getUserSignedIn() =>
+      userCollection.snapshots().map((snapshot) => snapshot.docs
+          .map((doc) => CustomUser.fromJson(doc.data()))
+          .toList()
+          .where(
+              (user) => user.userId == FirebaseAuth.instance.currentUser!.uid)
+          .toList()
+          .where(
+              (user) => user.userId == FirebaseAuth.instance.currentUser!.uid)
+          .single
+          .storeId!);
+
+  // Stream<String> getStoreIdConnected(String uid) {
+  //   return userCollection.snapshots().map((snapshot) => snapshot.docs
+  //       .map((doc) {
+  //         if (doc.data()['user_id'].toString() == uid)
+  //           print(doc.data()['user_id']);
+
+  //         return doc.data()['store_id'].toString();
+  //       })
+  //       .toList()
+  //       .first);
+  // }
+
+  // Stream<List<Product>> getUserProducts(String uid) {
+  //   return storeCollection.where("sdsd"=='eee');
+  // }
+
+  Stream<List<Product>> getProductList(String storeId) {
+    // 3andek zoz 7pulul ya t3ayet lel products collection toul walla ta3mel
+    // new ceollection esmha products fkol document 3andek owner id w taksideilha toul abda bel fekra loula
+    // fel get user aut raja3 CustomUser w lena aksidi lel store id
+    // CustomUser signedInUser = await getSignedInUser();
+    print('before stream');
+
+    return storeCollection.doc(storeId).collection('products').snapshots().map(
+        (snapshot) =>
+            snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList());
+  }
+// }
+
+// create query to get user has store proprety && dispose connectedStoreId when the user sign out
 }

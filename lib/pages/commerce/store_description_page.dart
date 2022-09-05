@@ -13,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:proximitystore/config/colors/app_colors.dart';
 import 'package:proximitystore/config/routes/routes.dart';
+import 'package:proximitystore/models/custom_user.dart';
 import 'package:proximitystore/models/store.dart';
 import 'package:proximitystore/utils/firebase_auth_services.dart';
 import 'package:proximitystore/utils/firebase_firestore_services.dart';
@@ -37,7 +38,7 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
   final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
   @override
   Widget build(BuildContext context) {
-    final singedInUser = FirebaseAuthServices().getSingedInUser()!;
+    final singedInUser = FirebaseAuthServices().currentUser()!.uid;
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -695,10 +696,9 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                   .text;
 
                                               FireStoreServices().createStore(
-                                                storeOwnerId: singedInUser.uid,
+                                                storeOwner: singedInUser,
                                                 storeName: storeName,
                                                 storeLocation: "storeLocation",
-                                                context: context,
                                               );
 
                                               context

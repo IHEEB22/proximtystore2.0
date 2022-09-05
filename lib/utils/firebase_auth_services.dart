@@ -111,10 +111,12 @@ class FirebaseAuthServices {
     await _auth.signOut();
   }
 
-  User? getSingedInUser() => _auth.currentUser;
-
-  Stream<User?> getCurrentUser() {
+  Stream<User?> getCurrentUserState() {
     return _auth.authStateChanges();
+  }
+
+  User? currentUser() {
+    return _auth.currentUser;
   }
 
   // also create a popup (on the verivy email page)to enter the verification code (resendcode button)

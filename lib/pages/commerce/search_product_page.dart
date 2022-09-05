@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:proximitystore/config/routes/routes.dart';
+import 'package:proximitystore/utils/firebase_firestore_services.dart';
 import 'package:proximitystore/widgets/add_product_sheet.dart';
 import 'package:proximitystore/widgets/product_added_sheet.dart';
 
@@ -22,7 +23,8 @@ class SearchProductPage extends StatefulWidget {
 
 class _SearchProductPageState extends State<SearchProductPage> {
   void showCongratsBottomSheet(BuildContext context) {
-    final arguments = (ModalRoute.of(context)?.settings.arguments ?? <String, String>{}) as Map;
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, String>{}) as Map;
     showModalBottomSheet<Future<void>?>(
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
@@ -32,9 +34,12 @@ class _SearchProductPageState extends State<SearchProductPage> {
       ),
       context: context,
       builder: (BuildContext context) =>
-          (arguments['currentRoute'] == 'addNewProductpage') ? ProductAddedSheet() : AddProductSheet(),
+          (arguments['currentRoute'] == 'addNewProductpage')
+              ? ProductAddedSheet()
+              : AddProductSheet(),
     ).then((value) {
-      FocusScope.of(context).requestFocus(context.read<BusinessProvider>().serachProductFocusNode);
+      FocusScope.of(context).requestFocus(
+          context.read<BusinessProvider>().serachProductFocusNode);
       context.read<BusinessProvider>().disposeDescription();
     });
   }
@@ -67,7 +72,8 @@ class _SearchProductPageState extends State<SearchProductPage> {
                     children: [
                       CustomBackButtonIcon(),
                       GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, AppRoutes.settingsPage),
+                        onTap: () => Navigator.pushNamed(
+                            context, AppRoutes.settingsPage),
                         child: Padding(
                           padding: EdgeInsets.only(left: 0.82.sw, top: 0.02.sh),
                           child: Image(
@@ -107,7 +113,10 @@ class _SearchProductPageState extends State<SearchProductPage> {
                               padding: EdgeInsets.only(left: 0.0853.sw),
                               child: Text(
                                 'itsVeryEmptyHere!'.tr(),
-                                style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    ?.copyWith(
                                       fontFamily: 'Montserrat',
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w400,
@@ -117,10 +126,14 @@ class _SearchProductPageState extends State<SearchProductPage> {
                             ),
                             0.0246.sh.verticalSpace,
                             Padding(
-                              padding: EdgeInsets.only(left: 0.0853.sw, right: 0.24.sw),
+                              padding: EdgeInsets.only(
+                                  left: 0.0853.sw, right: 0.24.sw),
                               child: Text(
                                 'thisIsWhereYouWillFindTheProductsYouAdd'.tr(),
-                                style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    ?.copyWith(
                                       fontFamily: 'Montserrat',
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w400,
@@ -135,16 +148,21 @@ class _SearchProductPageState extends State<SearchProductPage> {
                   ),
                   0.016.sh.verticalSpace,
                   Padding(
-                    padding: EdgeInsets.only(left: 0.082.sw, right: 0.082.sw, top: 0.42.sh),
+                    padding: EdgeInsets.only(
+                        left: 0.082.sw, right: 0.082.sw, top: 0.42.sh),
                     child: SizedBox(
                       width: double.infinity,
                       child: Consumer<BusinessProvider>(
                         builder: (context, value, child) => CustomBlueButton(
                           textInput: 'Ajouter un produit'.tr(),
                           onPressed: () {
-                            context.read<BusinessProvider>().disposeDescription();
+                            context
+                                .read<BusinessProvider>()
+                                .disposeDescription();
 
-                            context.read<BusinessProvider>().setHideSuggestionList();
+                            context
+                                .read<BusinessProvider>()
+                                .setHideSuggestionList();
                             showCupertinoModalPopup(
                               context: context,
                               builder: (_) => CustomCupertinoDialog(
@@ -152,20 +170,36 @@ class _SearchProductPageState extends State<SearchProductPage> {
                                 firstActionText: 'chooseFromGallery'.tr(),
                                 secondActionText: 'openTheCamera'.tr(),
                                 firstOnPresssed: () {
-                                  context.read<BusinessProvider>().setPickedFileFromGalery();
-                                  context.read<BusinessProvider>().disposeChekedSector();
-                                  context.read<BusinessProvider>().disposeDescription();
-                                  context.read<BusinessProvider>().sectorNameSelected = false;
-                                  Navigator.pushNamed(context, AppRoutes.addNewProductPage);
+                                  context
+                                      .read<BusinessProvider>()
+                                      .setPickedFileFromGalery();
+                                  context
+                                      .read<BusinessProvider>()
+                                      .disposeChekedSector();
+                                  context
+                                      .read<BusinessProvider>()
+                                      .disposeDescription();
+                                  context
+                                      .read<BusinessProvider>()
+                                      .sectorNameSelected = false;
+                                  Navigator.pushNamed(
+                                      context, AppRoutes.addNewProductPage);
                                 },
                                 secondOnPresssed: () {
-                                  context.read<BusinessProvider>().setPickedFileFromCamera();
-                                  Navigator.pushNamed(context, AppRoutes.addNewProductPage);
+                                  context
+                                      .read<BusinessProvider>()
+                                      .setPickedFileFromCamera();
+                                  Navigator.pushNamed(
+                                      context, AppRoutes.addNewProductPage);
                                 },
                               ),
                             ).then((value) {
-                              context.read<BusinessProvider>().setHideSuggestionList();
-                              context.read<BusinessProvider>().disposePickedFile();
+                              context
+                                  .read<BusinessProvider>()
+                                  .setHideSuggestionList();
+                              context
+                                  .read<BusinessProvider>()
+                                  .disposePickedFile();
                             });
                           },
                         ),

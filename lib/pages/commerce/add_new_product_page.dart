@@ -13,9 +13,6 @@ import 'package:provider/provider.dart';
 import 'package:proximitystore/config/images/app_images.dart';
 import 'package:proximitystore/config/routes/routes.dart';
 import 'package:proximitystore/models/product.dart';
-import 'package:proximitystore/models/store.dart';
-import 'package:proximitystore/providers/client_provider.dart';
-
 import '../../config/colors/app_colors.dart';
 import '../../providers/business_provider.dart';
 import '../../services/validation_items.dart';
@@ -129,9 +126,9 @@ class AddNewProductPage extends StatelessWidget {
                           inputLabel: 'productDescription'.tr(),
                           keyboardType: TextInputType.multiline,
                           validator: (val) {
-                            if (val == null || val.isEmpty) {
+                            if ((val == null) || ((val ?? '').isEmpty)) {
                               return "ce champ est obligatoire !";
-                            } else if (val.length < 8) {
+                            } else if ((val ?? '').length < 8) {
                               return "Description trés court";
                             } else {
                               return null;

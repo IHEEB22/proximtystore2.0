@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:proximitystore/wrappers/store_description_page_wrapper.dart';
 
 import '../utils/firebase_auth_services.dart';
 import '../pages/pages.dart';
@@ -16,7 +17,7 @@ class _LoginPageWrapperState extends State<LoginPageWrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<User?>(
-        stream: FirebaseAuthServices().getCurrentUser(),
+        stream: FirebaseAuthServices().getCurrentUserState(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return StoreDescriptionPageWrapper();
