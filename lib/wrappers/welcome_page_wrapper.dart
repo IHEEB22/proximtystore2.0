@@ -23,7 +23,7 @@ class _WelcomePageWrapperState extends State<WelcomePageWrapper> {
           if (snapshot.hasData) {
             return StoreDescriptionPageWrapper();
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(color: AppColors.deepBlueColor);
+            return CircularProgressIndicator(color: AppColors.lightPurpleColor);
           } else if (snapshot.hasError) {
             print('somthing went wrong');
             return WelcomePage();

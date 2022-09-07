@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
+import 'package:proximitystore/utils/firebase_auth_services.dart';
 import 'package:proximitystore/utils/firebase_firestore_services.dart';
 
 import '../config/colors/app_colors.dart';
@@ -29,7 +31,13 @@ class _AutocompleteSearchProductState extends State<AutocompleteSearchProduct> {
           if (snapshot.hasData) {
             if (snapshot.data != null) {
               return StreamBuilder<List<Product>>(
-                  stream: FireStoreServices().getProductList(snapshot.data!),
+                  stream:
+                      // (FirebaseAuthServices().currentUser()!.uid ==
+                      //         'bivp4O08qCdGaI1ebi9jLhebztI3')
+                      // ?
+                      // FireStoreServices().getAdminProduct()
+// :
+                      FireStoreServices().getProductList(snapshot.data!),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Consumer<BusinessProvider>(
@@ -291,10 +299,16 @@ class _AutocompleteSearchProductState extends State<AutocompleteSearchProduct> {
                               ),
                             ),
                             suggestionsCallback: (String query) {
-                              return snapshot.data!.where((product) => product
-                                  .productName
-                                  .toUpperCase()
-                                  .startsWith(query.toUpperCase()));
+                              if (FirebaseAuth.instance.currentUser!.uid ==
+                                  'bivp4O08qCdGaI1ebi9jLhebztI3')
+                                return context
+                                    .read<BusinessProvider>()
+                                    .getProductSuggestion(query);
+                              else
+                                return snapshot.data!.where((product) => product
+                                    .productName
+                                    .toUpperCase()
+                                    .startsWith(query.toUpperCase()));
                             },
                             textFieldConfiguration: TextFieldConfiguration(
                               inputFormatters: [
@@ -303,7 +317,7 @@ class _AutocompleteSearchProductState extends State<AutocompleteSearchProduct> {
                                       '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'),
                                 ),
                               ],
-                              autofocus: false,
+                              autofocus: true,
                               focusNode: context
                                   .watch<BusinessProvider>()
                                   .serachProductFocusNode,
@@ -380,7 +394,8 @@ class _AutocompleteSearchProductState extends State<AutocompleteSearchProduct> {
                         ),
                       );
                     } else
-                      return SizedBox();
+                      print(snapshot.error);
+                    return SizedBox();
                   });
             } else {
               if (snapshot.hasError) print(snapshot.hasError);

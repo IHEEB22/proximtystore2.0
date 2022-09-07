@@ -18,9 +18,9 @@ class Product {
   });
 
   static Product fromJson(Map<String, dynamic> json) {
-    final productName = json['product_Name'] as String;
     final productImage = json['product_image'] as String;
-    final productPrice = json['product_Price'] as double;
+    final productName = json['product_name'] as String;
+    final productPrice = json['product_price'] as double;
     final productStatus = json['product_status'] as String?;
 
     return Product(

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:proximitystore/config/colors/app_colors.dart';
@@ -112,7 +113,8 @@ class GeolocationSearchProductPage extends StatelessWidget {
                     children: <Widget>[
                       TextButton(
                         onPressed: () {
-                          WelcomePageWrapper();
+                          Navigator.pushNamed(
+                              context, AppRoutes.welcomePageWrapper);
                           context
                               .read<LocalistaionControllerprovider>()
                               .disposeAdressValue();

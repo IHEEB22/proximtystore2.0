@@ -134,27 +134,27 @@ class BusinessProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<List<Product>> getProductSuggestion(String query) async {
-  //   // final result = FireStoreServices()
-  //   //     .getUserProducts(storeIdConnected!)
-  //   //     .firstWhere((val) => false);
+  Future<List<Product>> getProductSuggestion(String query) async {
+    // final result = FireStoreServices()
+    //     .getUserProducts(storeIdConnected!)
+    //     .firstWhere((val) => false);
 
-  //   // List data = await json.decode(result);
-  //   final String response =
-  //       await rootBundle.loadString('assets/fake_data/products.json');
+    // List data = await json.decode(result);
+    final String response =
+        await rootBundle.loadString('assets/fake_data/products.json');
 
-  //   List data = await json.decode(response);
+    List data = await json.decode(response);
 
-  //   List<Product> productList =
-  //       data.map((json) => Product.fromJson(json)).toList();
-  //   if (newProduct != null) productList.add(newProduct!);
+    List<Product> productList =
+        data.map((json) => Product.fromJson(json)).toList();
+    if (newProduct != null) productList.add(newProduct!);
 
-  //   return productList.where((product) {
-  //     final productNameLower = product.productName.toLowerCase();
-  //     final queryLower = query.toLowerCase();
-  //     return productNameLower.contains(queryLower);
-  //   }).toList();
-  // }
+    return productList.where((product) {
+      final productNameLower = product.productName.toLowerCase();
+      final queryLower = query.toLowerCase();
+      return productNameLower.contains(queryLower);
+    }).toList();
+  }
 
   void disposeDescription() {
     _storeDescription.clear();
