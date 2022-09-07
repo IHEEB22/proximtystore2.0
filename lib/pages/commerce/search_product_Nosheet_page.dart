@@ -1,55 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:proximitystore/config/routes/routes.dart';
-import 'package:proximitystore/widgets/add_product_sheet.dart';
-import 'package:proximitystore/widgets/product_added_sheet.dart';
 
+import '../../config/routes/routes.dart';
 import '../../providers/business_provider.dart';
+import '../../widgets/autocomplete_search_product.dart';
+import '../../widgets/background_image.dart';
+import '../../widgets/custom_back_button_icon.dart';
+import '../../widgets/custom_blue_button.dart';
 import '../../widgets/custom_cupertino_dialog.dart';
-import '../../widgets/widgets.dart';
 
-class SearchProductPage extends StatefulWidget {
-  SearchProductPage({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<SearchProductPage> createState() => _SearchProductPageState();
-}
-
-class _SearchProductPageState extends State<SearchProductPage> {
-  void showCongratsBottomSheet(BuildContext context) {
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, String>{}) as Map;
-    showModalBottomSheet<Future<void>?>(
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20.r),
-        ),
-      ),
-      context: context,
-      builder: (BuildContext context) =>
-          (arguments['currentRoute'] == 'addNewProductpage')
-              ? ProductAddedSheet()
-              : AddProductSheet(),
-    ).then((value) {
-      FocusScope.of(context).requestFocus(
-          context.read<BusinessProvider>().serachProductFocusNode);
-      context.read<BusinessProvider>().disposeDescription();
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      showCongratsBottomSheet(context);
-    });
-  }
+class SearchProductNosheetPage extends StatelessWidget {
+  const SearchProductNosheetPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

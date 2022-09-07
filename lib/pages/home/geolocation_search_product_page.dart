@@ -7,6 +7,7 @@ import 'package:proximitystore/config/images/app_images.dart';
 import 'package:proximitystore/providers/localistaion_controller_provider.dart';
 import 'package:proximitystore/widgets/autocomplete_search_label.dart';
 import 'package:proximitystore/widgets/background_image.dart';
+import 'package:proximitystore/wrappers/welcome_page_wrapper.dart';
 
 import '../../config/routes/routes.dart';
 
@@ -111,8 +112,7 @@ class GeolocationSearchProductPage extends StatelessWidget {
                     children: <Widget>[
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(
-                              context, AppRoutes.welcomePageWrapper);
+                          WelcomePageWrapper();
                           context
                               .read<LocalistaionControllerprovider>()
                               .disposeAdressValue();

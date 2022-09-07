@@ -8,6 +8,7 @@ import 'package:proximitystore/config/routes/routes.dart';
 import 'package:proximitystore/providers/authentification_provider.dart';
 import 'package:proximitystore/widgets/background_image.dart';
 import 'package:proximitystore/widgets/custom_blue_button.dart';
+import 'package:proximitystore/wrappers/login_page_wrapper.dart';
 
 import '../../widgets/custom_back_button_icon.dart';
 
@@ -64,8 +65,7 @@ class WelcomePage extends StatelessWidget {
                         child: CustomBlueButton(
                             textInput: 'toLogIn'.tr(),
                             onPressed: () {
-                              Navigator.pushNamed(
-                                  context, AppRoutes.loginPageWrapper);
+                              LoginPageWrapper();
                               context
                                   .read<AuthentificationProvider>()
                                   .disposeControllers();

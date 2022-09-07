@@ -22,11 +22,12 @@ class FireStoreServices {
   }) async {
     final docStore = storeCollection.doc();
     final Store newStore = Store(
-        storeOwnerId: storeOwner,
-        storeId: docStore.id,
-        storeSectors: [],
-        storeName: storeName,
-        storeLocation: '');
+      storeOwnerId: storeOwner,
+      storeId: docStore.id,
+      storeSectors: [],
+      storeName: storeName,
+      // storeLocation: ''
+    );
     await docStore.set(newStore.toJson());
 
     // update user data
@@ -75,17 +76,26 @@ class FireStoreServices {
               (user) => user.userId == FirebaseAuth.instance.currentUser!.uid)
           .toList());
 
-  Stream<String> getUserSignedIn() =>
+  Stream<String> getSignedInStoreId() =>
       userCollection.snapshots().map((snapshot) => snapshot.docs
           .map((doc) => CustomUser.fromJson(doc.data()))
           .toList()
           .where(
               (user) => user.userId == FirebaseAuth.instance.currentUser!.uid)
           .toList()
-          .where(
-              (user) => user.userId == FirebaseAuth.instance.currentUser!.uid)
           .single
           .storeId!);
+  Stream<bool> getSignedInStoreHasProduct() =>
+      storeCollection.snapshots().map((snapshot) =>
+          snapshot.docs
+              .map((doc) => Store.fromJson(doc.data()))
+              .toList()
+              .where((store) =>
+                  store.storeOwnerId == FirebaseAuth.instance.currentUser!.uid)
+              .toList()
+              .single
+              .hasProduct ??
+          false);
 
   // Stream<String> getStoreIdConnected(String uid) {
   //   return userCollection.snapshots().map((snapshot) => snapshot.docs

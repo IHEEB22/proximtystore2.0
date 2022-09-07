@@ -24,7 +24,7 @@ class AutocompleteSearchProduct extends StatefulWidget {
 class _AutocompleteSearchProductState extends State<AutocompleteSearchProduct> {
   Widget build(BuildContext context) {
     return StreamBuilder<String>(
-        stream: FireStoreServices().getUserSignedIn(),
+        stream: FireStoreServices().getSignedInStoreId(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data != null) {
