@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
@@ -119,7 +117,7 @@ class SearchProductNosheetPage extends StatelessWidget {
                       child: Consumer<BusinessProvider>(
                         builder: (context, value, child) => CustomBlueButton(
                           textInput: 'Ajouter un produit'.tr(),
-                          onPressed: () {
+                          onPressed: () async {
                             context
                                 .read<BusinessProvider>()
                                 .disposeDescription();
@@ -127,6 +125,9 @@ class SearchProductNosheetPage extends StatelessWidget {
                             context
                                 .read<BusinessProvider>()
                                 .setHideSuggestionList();
+                            context
+                                .read<BusinessProvider>()
+                                .disposeAddproductControllers();
                             showCupertinoModalPopup(
                               context: context,
                               builder: (_) => CustomCupertinoDialog(
@@ -161,9 +162,6 @@ class SearchProductNosheetPage extends StatelessWidget {
                               context
                                   .read<BusinessProvider>()
                                   .setHideSuggestionList();
-                              context
-                                  .read<BusinessProvider>()
-                                  .disposePickedFile();
                             });
                           },
                         ),

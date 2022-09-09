@@ -694,7 +694,9 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                   .read<BusinessProvider>()
                                                   .businessName
                                                   .text;
-
+                                              context
+                                                  .read<BusinessProvider>()
+                                                  .pickedFile;
                                               FireStoreServices().createStore(
                                                 storeOwner: singedInUser,
                                                 storeName: storeName,
@@ -708,9 +710,7 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                               context
                                                   .read<BusinessProvider>()
                                                   .disposeSettingsControllers();
-                                              context
-                                                  .read<BusinessProvider>()
-                                                  .disposePickedFile();
+
                                               Navigator.pushNamed(
                                                 context,
                                                 AppRoutes.searchProductPage,

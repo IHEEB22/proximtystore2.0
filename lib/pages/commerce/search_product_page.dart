@@ -39,7 +39,7 @@ class _SearchProductPageState extends State<SearchProductPage> {
     ).then((value) {
       FocusScope.of(context).requestFocus(
           context.read<BusinessProvider>().serachProductFocusNode);
-      context.read<BusinessProvider>().disposeDescription();
+      // context.read<BusinessProvider>().disposeAddproductControllers();
     });
   }
 
@@ -153,7 +153,7 @@ class _SearchProductPageState extends State<SearchProductPage> {
                       child: Consumer<BusinessProvider>(
                         builder: (context, value, child) => CustomBlueButton(
                           textInput: 'Ajouter un produit'.tr(),
-                          onPressed: () {
+                          onPressed: () async {
                             context
                                 .read<BusinessProvider>()
                                 .disposeDescription();
@@ -161,6 +161,9 @@ class _SearchProductPageState extends State<SearchProductPage> {
                             context
                                 .read<BusinessProvider>()
                                 .setHideSuggestionList();
+                            context
+                                .read<BusinessProvider>()
+                                .disposeAddproductControllers();
                             showCupertinoModalPopup(
                               context: context,
                               builder: (_) => CustomCupertinoDialog(
@@ -195,9 +198,6 @@ class _SearchProductPageState extends State<SearchProductPage> {
                               context
                                   .read<BusinessProvider>()
                                   .setHideSuggestionList();
-                              context
-                                  .read<BusinessProvider>()
-                                  .disposePickedFile();
                             });
                           },
                         ),

@@ -1,15 +1,14 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proximitystore/models/product.dart';
-import 'package:proximitystore/utils/firebase_auth_services.dart';
+import 'package:proximitystore/utils/firebase_firestore_services.dart';
 
 import '../models/sector.dart';
-import '../models/store.dart';
 import '../services/validation_items.dart';
 
 class BusinessProvider with ChangeNotifier {
@@ -129,17 +128,12 @@ class BusinessProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setStoreIdConnected({required String storeId}) {
-    storeIdConnected = storeId;
+  void setStoreIdConnected() async {
+    storeIdConnected = await FireStoreServices().getSignedInStoreId().first;
     notifyListeners();
   }
 
   Future<List<Product>> getProductSuggestion(String query) async {
-    // final result = FireStoreServices()
-    //     .getUserProducts(storeIdConnected!)
-    //     .firstWhere((val) => false);
-
-    // List data = await json.decode(result);
     final String response =
         await rootBundle.loadString('assets/fake_data/products.json');
 
@@ -159,6 +153,15 @@ class BusinessProvider with ChangeNotifier {
   void disposeDescription() {
     _storeDescription.clear();
     notifyListeners();
+  }
+
+  bool getIsAddProductButtonEnabled() {
+    return ValidationItem(val: _productDescription.text)
+                .validateProductPrice() ==
+            null &&
+        ValidationItem(val: _productPrice.text).validateProductPrice() == null;
+    //  &&
+    // !_isPickedFileEmpty;
   }
 
   Future<List<Sector>> getSectors() async {
@@ -291,7 +294,7 @@ class BusinessProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setPickedFileFromCamera() {
+  void setPickedFileFromCamera() async {
     pickedFile = picker.getImage(source: ImageSource.camera).whenComplete(() {
       _isPickedFileEmpty = false;
       notifyListeners();
@@ -299,7 +302,7 @@ class BusinessProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setPickedFileFromGalery() {
+  void setPickedFileFromGalery() async {
     pickedFile = picker.getImage(source: ImageSource.gallery).whenComplete(() {
       _isPickedFileEmpty = false;
       notifyListeners();
@@ -389,8 +392,15 @@ class BusinessProvider with ChangeNotifier {
     _phoneNumber.clear();
   }
 
-  void disposePickedFile() {
-    Future<PickedFile?> pickedFile = Future.value(null);
+  void disposeAddproductControllers() async {
+    _productDescription.clear();
+    _productPrice.clear();
+    pickedFile = Future.value(null);
+    notifyListeners();
+  }
+
+  void disposePickedFile() async {
+    pickedFile = Future.value(null);
     notifyListeners();
   }
 
@@ -417,7 +427,6 @@ class BusinessProvider with ChangeNotifier {
     _isPasswordVisible = false;
     _isNewPasswordVisible = false;
     _isRepeatNewPasswordVisible = false;
-    disposePickedFile();
   }
 
   void disposeSectors() {

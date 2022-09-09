@@ -90,6 +90,9 @@ class AddProductSheet extends StatelessWidget {
                   child: CustomBlueButton(
                     textInput: 'addMyNewProduct'.tr(),
                     onPressed: () {
+                      context
+                          .read<BusinessProvider>()
+                          .disposeAddproductControllers();
                       Navigator.pushNamed(context, AppRoutes.addNewProductPage);
                     },
                   )),

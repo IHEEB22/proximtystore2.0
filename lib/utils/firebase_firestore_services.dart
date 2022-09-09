@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:proximitystore/models/custom_user.dart';
 import 'package:proximitystore/models/product.dart';
 import 'package:proximitystore/models/store.dart';
-import 'package:proximitystore/utils/firebase_auth_services.dart';
+import 'package:proximitystore/providers/business_provider.dart';
+import 'package:provider/provider.dart';
 
 class FireStoreServices {
   final storeCollection = FirebaseFirestore.instance.collection('stores');
@@ -13,13 +19,34 @@ class FireStoreServices {
       FirebaseFirestore.instance.collection('storeProductCollection');
   final clientProductCollection =
       FirebaseFirestore.instance.collection('clientproduct');
+  FirebaseStorage storage = FirebaseStorage.instance;
+
   void createUser({required CustomUser newUser}) async {
     final docUser = userCollection.doc(newUser.userId);
 
     await docUser.set(newUser.toJson());
   }
 
-  void createStore({
+  Future<String> getImageurl(BuildContext context) async {
+    try {
+      String imgaeName =
+          context.read<BusinessProvider>().productDescription.text;
+      final storageRef = storage.ref().child('PRODUCT IMAGES').child(imgaeName);
+      PickedFile? pickedFile =
+          await context.read<BusinessProvider>().pickedFile;
+      File imageFile = File(pickedFile!.path);
+      await storageRef.putFile(imageFile);
+      String url = await storageRef.getDownloadURL() + '.jpeg';
+
+      print(url);
+      return url;
+    } on FirebaseException catch (e) {
+      print(e);
+      return 'error';
+    }
+  }
+
+  Future createStore({
     required String storeOwner,
     required String storeName,
     required String storeLocation,
@@ -42,7 +69,7 @@ class FireStoreServices {
     });
   }
 
-  void createProduct(String storeConnected, Product newProduct) async {
+  Future createProduct(String storeConnected, Product newProduct) async {
     print(storeConnected);
     final docStoreConnected = storeCollection.doc(storeConnected);
     await docStoreConnected
@@ -54,6 +81,11 @@ class FireStoreServices {
     await productCollection
         .doc(newProduct.productName)
         .set(newProduct.toJson());
+
+    if (!await getSignedInStoreHasProduct().last)
+      await docStoreConnected.update({
+        'has_product': true,
+      });
   }
 
   Stream<List<CustomUser>> getUsers() =>

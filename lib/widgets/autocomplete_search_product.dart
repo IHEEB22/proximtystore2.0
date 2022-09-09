@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
-import 'package:proximitystore/utils/firebase_auth_services.dart';
 import 'package:proximitystore/utils/firebase_firestore_services.dart';
 
 import '../config/colors/app_colors.dart';
@@ -32,10 +31,7 @@ class _AutocompleteSearchProductState extends State<AutocompleteSearchProduct> {
             if (snapshot.data != null) {
               return StreamBuilder<List<Product>>(
                   stream:
-                      // (FirebaseAuthServices().currentUser()!.uid ==
-                      //         'bivp4O08qCdGaI1ebi9jLhebztI3')
-                      // ?
-                      // FireStoreServices().getAdminProduct()
+
 // :
                       FireStoreServices().getProductList(snapshot.data!),
                   builder: (context, snapshot) {
@@ -63,8 +59,6 @@ class _AutocompleteSearchProductState extends State<AutocompleteSearchProduct> {
                             debounceDuration: Duration(microseconds: 500),
                             onSuggestionSelected: (Product sugesstion) {},
                             itemBuilder: (context, Product suggestion) {
-                              final product = suggestion;
-
                               return Card(
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 12.h),
                                 elevation: 0.5,
@@ -87,7 +81,11 @@ class _AutocompleteSearchProductState extends State<AutocompleteSearchProduct> {
                                           fit: BoxFit.cover,
                                           imageUrl: suggestion.productImage,
                                           placeholder: (context, url) =>
-                                              new CircularProgressIndicator(),
+                                              Transform.scale(
+                                            scale: 0.2,
+                                            child:
+                                                new CircularProgressIndicator(),
+                                          ),
                                           errorWidget: (context, url, error) =>
                                               new Icon(Icons.error),
                                         ),
@@ -317,7 +315,7 @@ class _AutocompleteSearchProductState extends State<AutocompleteSearchProduct> {
                                       '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'),
                                 ),
                               ],
-                              autofocus: true,
+                              // autofocus: true,
                               focusNode: context
                                   .watch<BusinessProvider>()
                                   .serachProductFocusNode,

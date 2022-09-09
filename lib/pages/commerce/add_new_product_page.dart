@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -90,7 +90,7 @@ class AddNewProductPage extends StatelessWidget {
                             image: AssetImage(AppImages.editIcon),
                           ),
                           textInput: 'editPhoto'.tr(),
-                          onPressed: () {
+                          onPressed: () async {
                             showCupertinoModalPopup(
                               context: context,
                               builder: (_) => CustomCupertinoDialog(
@@ -126,17 +126,19 @@ class AddNewProductPage extends StatelessWidget {
                           inputLabel: 'productDescription'.tr(),
                           keyboardType: TextInputType.multiline,
                           validator: (val) {
-                            if ((val == null) || ((val ?? '').isEmpty)) {
+                            if ((val == null) || (val.isEmpty)) {
                               return "ce champ est obligatoire !";
-                            } else if ((val ?? '').length < 8) {
+                            } else if (val.length < 8) {
                               return "Description trés court";
                             } else {
                               return null;
                             }
                           },
-                          onChanged: (val) => context
-                              .read<BusinessProvider>()
-                              .setTemperleftProduct()),
+                          onChanged: (val) {
+                            context
+                                .read<BusinessProvider>()
+                                .setTemperleftProduct();
+                          }),
                       0.015.sh.verticalSpace,
                       Padding(
                         padding: EdgeInsets.only(
@@ -166,16 +168,6 @@ class AddNewProductPage extends StatelessWidget {
                         hintText: 'enterPrice'.tr(),
                         inputLabel: 'price'.tr(),
                         keyboardType: TextInputType.phone,
-                        onChanged: (val) => context
-                            .read<BusinessProvider>()
-                            .phoneNumber
-                            .addListener(() {
-                          context
-                              .read<BusinessProvider>()
-                              .phoneNumber
-                              .text
-                              .isNotEmpty;
-                        }),
                       ),
                       0.0418.sh.verticalSpace,
                       Padding(
@@ -274,21 +266,10 @@ class AddNewProductPage extends StatelessWidget {
                       ),
                       0.0763.sh.verticalSpace,
                       Consumer<BusinessProvider>(
-                          builder: (context, value, child) => context
-                                      .watch<BusinessProvider>()
-                                      .lastSectorNameSelected
-                                      .isNotEmpty &&
-                                  context
-                                      .watch<BusinessProvider>()
-                                      .productDescription
-                                      .text
-                                      .isNotEmpty &&
-                                  context
-                                      .watch<BusinessProvider>()
-                                      .productPrice
-                                      .text
-                                      .isNotEmpty
-                              // ignore: dead_code
+                          builder: (context, value, child) => true
+                              // context
+                              //         .watch<BusinessProvider>()
+                              //         .getIsAddProductButtonEnabled()
                               ? Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 0.043.sw),
@@ -296,39 +277,37 @@ class AddNewProductPage extends StatelessWidget {
                                       width: double.infinity,
                                       child: CustomBlueButton(
                                         onPressed: () async {
-                                          String storeIdConnected = context
-                                                  .read<BusinessProvider>()
-                                                  .storeIdConnected ??
-                                              'no store created yet ';
-                                          Product newProduct = Product(
-                                            productName: context
-                                                .read<BusinessProvider>()
-                                                .productDescription
-                                                .text,
-                                            productImage:
-                                                'https://s3-alpha-sig.figma.com/img/c13b/964f/6f86b440c9e16b24fc61c51efd573da6?Expires=1660521600&Signature=IiPpfiJ0ZWJRqxp3qMkXQU381h9rcFv7DfRA6wbmVTN6czBGq70uS~QLWq12b80we9iPNizsUrq5JViuxTOm4dQxSFq5HHj64e-d1QjJ8eiy8SGMJboYyM2lhq-rmuCRrIuxMLnslL4h~Z5Kj9agcqmucLDJ~9H4AGxnbonI65-cpXrfZWv95Y-UycpnOOa0Resf5MUI9xPaK7X4~W~VJIagxPd0hycpeJUkBpWW6EgZfGxwOWvu7jVySmxt1elGZjEtItjHketmmVX0-lyG9o6Om7MaEx3k6JrnbkfaMbI-cUesed5fWWeYfNrnBytF3AiW~ePy6mCO2I4hFAK6qQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
-                                            productPrice: double.parse(context
-                                                .read<BusinessProvider>()
-                                                .productPrice
-                                                .text),
-                                            productStatus: 'en attente',
-                                          );
-                                          FireStoreServices().createProduct(
-                                              storeIdConnected, newProduct);
-
                                           Navigator.pushNamed(context,
                                               AppRoutes.searchProductPage,
                                               arguments: {
                                                 'currentRoute':
                                                     'addNewProductpage'
                                               });
+                                          Product newProduct = Product(
+                                            productName: context
+                                                .read<BusinessProvider>()
+                                                .productDescription
+                                                .text,
+                                            productImage:
+                                                await FireStoreServices()
+                                                    .getImageurl(context),
+                                            productPrice: double.parse(context
+                                                .read<BusinessProvider>()
+                                                .productPrice
+                                                .text),
+                                            productStatus: 'en attente',
+                                          );
 
                                           context
                                               .read<BusinessProvider>()
-                                              .disposePickedFile();
-                                          context
-                                              .read<BusinessProvider>()
-                                              .disposeSettingsControllers();
+                                              .setStoreIdConnected();
+                                          String storeIdConnected =
+                                              await context
+                                                  .read<BusinessProvider>()
+                                                  .storeIdConnected!;
+                                          print(storeIdConnected);
+                                          FireStoreServices().createProduct(
+                                              storeIdConnected, newProduct);
                                         },
                                         textInput: 'addTheProduct'.tr(),
                                       )),
@@ -357,6 +336,9 @@ class AddNewProductPage extends StatelessWidget {
               child: TextButton(
                 onPressed: () {
                   Navigator.pop(context);
+                  context
+                      .read<BusinessProvider>()
+                      .disposeAddproductControllers();
                 },
                 child: Text(
                   'cancel'.tr(),

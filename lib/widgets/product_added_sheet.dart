@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:proximitystore/config/colors/app_colors.dart';
-import 'package:proximitystore/widgets/custom_blue_button.dart';
 
 import '../config/images/app_images.dart';
 import '../providers/business_provider.dart';
@@ -46,7 +45,10 @@ class ProductAddedSheet extends StatelessWidget {
                 ),
                 Padding(
                     padding: EdgeInsets.only(bottom: 0.01.sh),
-                    child: Image(height: 0.035.sh, width: 0.05.sw, image: AssetImage(AppImages.congratsIcon)))
+                    child: Image(
+                        height: 0.035.sh,
+                        width: 0.05.sw,
+                        image: AssetImage(AppImages.congratsIcon)))
               ],
             ),
             0.07.sh.verticalSpace,

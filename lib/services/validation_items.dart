@@ -8,8 +8,9 @@ class ValidationItem {
   ValidationItem({this.val});
 
   String? validateEmail() {
-    bool emailValid =
-        RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val ?? "Not email");
+    bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(val ?? "Not email");
 
     if ((val == null || (val ?? "").isEmpty)) {
       return 'ce champ est obligatoire !';
@@ -43,11 +44,12 @@ class ValidationItem {
 
   String? validateProductPrice() {
     int len = (val ?? '').length;
-    bool priceValid = RegExp(r'^(?=\D*(?:\d\D*){1,12}$)\d+(?:\.\d{1,4})?$').hasMatch(val ?? "Not Price");
+    bool priceValid = RegExp(r'^(?=\D*(?:\d\D*){1,12}$)\d+(?:\.\d{1,4})?$')
+        .hasMatch(val ?? "Not Price");
 
     if ((val == null || (val ?? "").isEmpty)) {
       return 'ce champ est obligatoire !';
-    } else if (len < 3 || !priceValid) {
+    } else if (len < 2 || !priceValid) {
       return 'prix commerce invalide';
     } else
       return null;
@@ -55,7 +57,9 @@ class ValidationItem {
 
   String? validatePhoneNumber() {
     int len = (val ?? '').length;
-    bool phoneNumberValid = RegExp(r'^(?=\D*(?:\d\D*){1,12}$)\d+(?:\.\d{1,4})?$').hasMatch(val ?? "Not phoneNumber");
+    bool phoneNumberValid =
+        RegExp(r'^(?=\D*(?:\d\D*){1,12}$)\d+(?:\.\d{1,4})?$')
+            .hasMatch(val ?? "Not phoneNumber");
     if ((val == null || (val ?? "").isEmpty)) {
       return 'ce champ est obligatoire !';
     } else if (len < 8 || !phoneNumberValid) {
@@ -65,7 +69,8 @@ class ValidationItem {
   }
 
   String? validateTown({required BuildContext context, required String town}) {
-    List<Prediction> predictionList = context.read<LocalistaionControllerprovider>().predictionList;
+    List<Prediction> predictionList =
+        context.read<LocalistaionControllerprovider>().predictionList;
     bool exist = false;
 
     predictionList.forEach((Prediction element) {
