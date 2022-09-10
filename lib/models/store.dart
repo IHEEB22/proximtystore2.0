@@ -7,11 +7,11 @@ class Store {
   final String storeName;
   final String storeOwnerId;
   final String storeId;
-  final List<String> storeSectors;
+  final Map<String, bool> storeSectors;
   List<Product> storeProducts = [];
   bool? storeStatus;
   final String storeLocation;
-  String? storeImage;
+  final String storeImage;
   String? storeDescription;
   bool? hasProduct;
 
@@ -21,8 +21,8 @@ class Store {
     required this.storeSectors,
     required this.storeName,
     required this.storeLocation,
+    required this.storeImage,
     this.storeStatus,
-    this.storeImage,
     this.storeDescription,
     this.hasProduct,
   });
@@ -32,10 +32,10 @@ class Store {
     final storeStatus = json['store_status'] as bool?;
     final storeName = json['store_name'] as String;
     final storeLocation = json['store_location'] as String;
-    final storeImage = json['store_image'] as String?;
+    final storeImage = json['store_image'] as String;
     final storeDescription = json['store_description'] as String?;
     // final storeProducts = json['store_products'] as List<Product>;
-    final storeSectors = json['store_sectors'] as List;
+    final storeSectors = json['store_sectors'] as Map;
     final storeId = json['store_id'] as String;
     final storeOwnerId = json['store_owner_Id'] as String;
     final hasProduct = json['has_product'] as bool?;
@@ -49,7 +49,7 @@ class Store {
       storeImage: storeImage,
       storeDescription: storeDescription,
       hasProduct: hasProduct ?? false,
-      storeSectors: [],
+      storeSectors: storeSectors,
     );
   }
 

@@ -697,10 +697,17 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                               context
                                                   .read<BusinessProvider>()
                                                   .pickedFile;
-                                              FireStoreServices().createStore(
+                                              await FireStoreServices()
+                                                  .createStore(
+                                                storeImage:
+                                                    await FireStoreServices()
+                                                        .getImageurl(context),
                                                 storeOwner: singedInUser,
                                                 storeName: storeName,
                                                 storeLocation: "storeLocation",
+                                                storeSectors: context
+                                                    .read<BusinessProvider>()
+                                                    .chekedsectorsList,
                                               );
 
                                               context

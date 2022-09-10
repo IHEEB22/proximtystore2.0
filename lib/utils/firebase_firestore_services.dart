@@ -21,7 +21,7 @@ class FireStoreServices {
       FirebaseFirestore.instance.collection('clientproduct');
   FirebaseStorage storage = FirebaseStorage.instance;
 
-  void createUser({required CustomUser newUser}) async {
+  Future createUser({required CustomUser newUser}) async {
     final docUser = userCollection.doc(newUser.userId);
 
     await docUser.set(newUser.toJson());
@@ -50,14 +50,18 @@ class FireStoreServices {
     required String storeOwner,
     required String storeName,
     required String storeLocation,
+    required String storeImage,
+    required Map<String, bool> storeSectors,
   }) async {
     final docStore = storeCollection.doc();
     final Store newStore = Store(
-        storeOwnerId: storeOwner,
-        storeId: docStore.id,
-        storeSectors: [],
-        storeName: storeName,
-        storeLocation: '');
+      storeOwnerId: storeOwner,
+      storeId: docStore.id,
+      storeSectors: storeSectors,
+      storeName: storeName,
+      storeLocation: '',
+      storeImage: storeImage,
+    );
     await docStore.set(newStore.toJson());
 
     // update user data
@@ -114,7 +118,7 @@ class FireStoreServices {
               .where((store) =>
                   store.storeOwnerId == FirebaseAuth.instance.currentUser!.uid)
               .toList()
-              .single
+              .last
               .hasProduct ??
           false);
 

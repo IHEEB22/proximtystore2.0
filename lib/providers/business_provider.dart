@@ -128,9 +128,8 @@ class BusinessProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setStoreIdConnected() async {
-    storeIdConnected = await FireStoreServices().getSignedInStoreId().first;
-    notifyListeners();
+  Future<String> getStoreIdConnected() async {
+    return FireStoreServices().getSignedInStoreId().first;
   }
 
   Future<List<Product>> getProductSuggestion(String query) async {
@@ -295,7 +294,9 @@ class BusinessProvider with ChangeNotifier {
   }
 
   void setPickedFileFromCamera() async {
-    pickedFile = picker.getImage(source: ImageSource.camera).whenComplete(() {
+    pickedFile = picker
+        .getImage(source: ImageSource.camera, imageQuality: 85)
+        .whenComplete(() {
       _isPickedFileEmpty = false;
       notifyListeners();
     });
@@ -303,7 +304,9 @@ class BusinessProvider with ChangeNotifier {
   }
 
   void setPickedFileFromGalery() async {
-    pickedFile = picker.getImage(source: ImageSource.gallery).whenComplete(() {
+    pickedFile = picker
+        .getImage(source: ImageSource.gallery, imageQuality: 85)
+        .whenComplete(() {
       _isPickedFileEmpty = false;
       notifyListeners();
     });

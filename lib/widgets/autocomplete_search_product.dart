@@ -81,10 +81,16 @@ class _AutocompleteSearchProductState extends State<AutocompleteSearchProduct> {
                                           fit: BoxFit.cover,
                                           imageUrl: suggestion.productImage,
                                           placeholder: (context, url) =>
-                                              Transform.scale(
-                                            scale: 0.2,
-                                            child:
-                                                new CircularProgressIndicator(),
+                                              Container(
+                                            color:
+                                                AppColors.transparentGreyColor,
+                                            child: Transform.scale(
+                                              scale: 0.2,
+                                              child:
+                                                  new CircularProgressIndicator(
+                                                strokeWidth: 14.0,
+                                              ),
+                                            ),
                                           ),
                                           errorWidget: (context, url, error) =>
                                               new Icon(Icons.error),

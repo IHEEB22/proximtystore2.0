@@ -84,7 +84,7 @@ class FirebaseAuthServices {
           password: password,
           timeStamp: DateTime.now().toString(),
         );
-        FireStoreServices().createUser(newUser: registredUser);
+        await FireStoreServices().createUser(newUser: registredUser);
         context.read<AuthentificationProvider>().disposeControllers();
         Navigator.pushNamed(context, AppRoutes.loginPage);
       }

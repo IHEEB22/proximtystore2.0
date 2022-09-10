@@ -298,16 +298,14 @@ class AddNewProductPage extends StatelessWidget {
                                             productStatus: 'en attente',
                                           );
 
-                                          context
-                                              .read<BusinessProvider>()
-                                              .setStoreIdConnected();
-                                          String storeIdConnected =
-                                              await context
-                                                  .read<BusinessProvider>()
-                                                  .storeIdConnected!;
-                                          print(storeIdConnected);
-                                          FireStoreServices().createProduct(
-                                              storeIdConnected, newProduct);
+                                          String? storeIdConnected;
+
+                                          await FireStoreServices()
+                                              .createProduct(
+                                                  await context
+                                                      .read<BusinessProvider>()
+                                                      .getStoreIdConnected(),
+                                                  newProduct);
                                         },
                                         textInput: 'addTheProduct'.tr(),
                                       )),
