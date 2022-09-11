@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proximitystore/models/product.dart';
+import 'package:proximitystore/utils/firebase_auth_services.dart';
 import 'package:proximitystore/utils/firebase_firestore_services.dart';
 
 import '../models/sector.dart';
@@ -352,7 +353,16 @@ class BusinessProvider with ChangeNotifier {
         (_sectorsData[sectorName] == true)) {
       _chekedsectorsList.addAll({sectorName: false});
     }
+
     notifyListeners();
+  }
+
+  void updateChekedSectors() async {
+    List<String> listSectors = await FireStoreServices().getStoreSectors();
+    final m = listSectors.asMap().values.map((e) => {e: false});
+    m.forEach((element) {
+      _chekedsectorsList.addAll(element);
+    });
   }
 
   void removeSector(sectorName) {

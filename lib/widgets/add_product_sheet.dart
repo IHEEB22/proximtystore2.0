@@ -89,7 +89,8 @@ class AddProductSheet extends StatelessWidget {
                   width: double.infinity,
                   child: CustomBlueButton(
                     textInput: 'addMyNewProduct'.tr(),
-                    onPressed: () {
+                    onPressed: () async {
+                      context.read<BusinessProvider>().updateChekedSectors();
                       context
                           .read<BusinessProvider>()
                           .disposeAddproductControllers();

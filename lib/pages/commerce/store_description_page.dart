@@ -707,7 +707,9 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                 storeLocation: "storeLocation",
                                                 storeSectors: context
                                                     .read<BusinessProvider>()
-                                                    .chekedsectorsList,
+                                                    .chekedsectorsList
+                                                    .keys
+                                                    .toList(),
                                               );
 
                                               context

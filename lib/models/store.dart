@@ -7,7 +7,7 @@ class Store {
   final String storeName;
   final String storeOwnerId;
   final String storeId;
-  final Map<String, bool> storeSectors;
+  final List<String> storeSectors;
   List<Product> storeProducts = [];
   bool? storeStatus;
   final String storeLocation;
@@ -35,22 +35,20 @@ class Store {
     final storeImage = json['store_image'] as String;
     final storeDescription = json['store_description'] as String?;
     // final storeProducts = json['store_products'] as List<Product>;
-    final storeSectors = json['store_sectors'] as Map;
+    final storeSectors = json['store_sectors'] as List;
     final storeId = json['store_id'] as String;
     final storeOwnerId = json['store_owner_Id'] as String;
     final hasProduct = json['has_product'] as bool?;
-
     return Store(
-      storeId: storeId,
-      storeOwnerId: storeOwnerId,
-      storeStatus: storeStatus,
-      storeName: storeName,
-      storeLocation: storeLocation,
-      storeImage: storeImage,
-      storeDescription: storeDescription,
-      hasProduct: hasProduct ?? false,
-      storeSectors: storeSectors,
-    );
+        storeId: storeId,
+        storeOwnerId: storeOwnerId,
+        storeStatus: storeStatus,
+        storeName: storeName,
+        storeLocation: storeLocation,
+        storeImage: storeImage,
+        storeDescription: storeDescription,
+        hasProduct: hasProduct ?? false,
+        storeSectors: storeSectors.cast<String>());
   }
 
   Map<String, dynamic> toJson() => {

@@ -51,9 +51,9 @@ class FireStoreServices {
     required String storeName,
     required String storeLocation,
     required String storeImage,
-    required Map<String, bool> storeSectors,
+    required List<String> storeSectors,
   }) async {
-    final docStore = storeCollection.doc();
+    final docStore = await storeCollection.doc();
     final Store newStore = Store(
       storeOwnerId: storeOwner,
       storeId: docStore.id,
@@ -66,7 +66,7 @@ class FireStoreServices {
 
     // update user data
 
-    final docUser = userCollection.doc(storeOwner);
+    final docUser = await userCollection.doc(storeOwner);
     await docUser.update({
       'store_id': docStore.id,
       'has_store': true,
@@ -109,6 +109,17 @@ class FireStoreServices {
           .toList()
           .single
           .storeId!);
+  Future<List<String>> getStoreSectors() => storeCollection
+      .snapshots()
+      .map((snapshot) => snapshot.docs
+          .map((doc) => Store.fromJson(doc.data()))
+          .toList()
+          .where((store) =>
+              store.storeOwnerId == FirebaseAuth.instance.currentUser!.uid)
+          .toList()
+          .single
+          .storeSectors)
+      .last;
 
   Stream<bool> getSignedInStoreHasProduct() =>
       storeCollection.snapshots().map((snapshot) =>

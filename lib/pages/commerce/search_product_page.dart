@@ -157,7 +157,9 @@ class _SearchProductPageState extends State<SearchProductPage> {
                             context
                                 .read<BusinessProvider>()
                                 .disposeDescription();
-
+                            context
+                                .read<BusinessProvider>()
+                                .updateChekedSectors();
                             context
                                 .read<BusinessProvider>()
                                 .setHideSuggestionList();
