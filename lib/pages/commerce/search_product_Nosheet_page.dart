@@ -121,7 +121,7 @@ class SearchProductNosheetPage extends StatelessWidget {
                             context
                                 .read<BusinessProvider>()
                                 .disposeDescription();
-                            context
+                            await context
                                 .read<BusinessProvider>()
                                 .updateChekedSectors();
 

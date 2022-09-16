@@ -357,11 +357,19 @@ class BusinessProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateChekedSectors() async {
-    List<String> listSectors = await FireStoreServices().getStoreSectors();
-    final m = listSectors.asMap().values.map((e) => {e: false});
-    m.forEach((element) {
-      _chekedsectorsList.addAll(element);
+  Future updateChekedSectors() async {
+    // update chkedsectors map with data from firebase incase
+    //  the data get lost when the user navigate directiky to the search product page
+    List<String> listSectors = [];
+
+    await FireStoreServices().getStoreSectors().then((value) {
+      _chekedsectorsList.clear();
+      listSectors = value;
+      Iterable<Map<String, bool>> m =
+          listSectors.asMap().values.map((e) => {e: false});
+      m.forEach((element) {
+        _chekedsectorsList.addAll(element);
+      });
     });
   }
 
@@ -406,9 +414,9 @@ class BusinessProvider with ChangeNotifier {
   }
 
   void disposeAddproductControllers() async {
+    pickedFile = Future.value(null);
     _productDescription.clear();
     _productPrice.clear();
-    pickedFile = Future.value(null);
     notifyListeners();
   }
 

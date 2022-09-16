@@ -2,19 +2,17 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:proximitystore/config/colors/app_colors.dart';
 import 'package:proximitystore/config/routes/routes.dart';
-import 'package:proximitystore/models/custom_user.dart';
-import 'package:proximitystore/models/store.dart';
 import 'package:proximitystore/utils/firebase_auth_services.dart';
 import 'package:proximitystore/utils/firebase_firestore_services.dart';
 import 'package:proximitystore/widgets/sheet_store_sectors.dart';
@@ -371,7 +369,8 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                           searchPrefix: false,
                                           labelEnabled: true,
                                           symetricPadding: 0.082,
-                                          onSuggestionSelected: (suggestion) {
+                                          onSuggestionSelected:
+                                              (suggestion) async {
                                             context
                                                 .read<
                                                     LocalistaionControllerprovider>()
@@ -697,6 +696,15 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                               context
                                                   .read<BusinessProvider>()
                                                   .pickedFile;
+
+                                              var locationSelected = context
+                                                  .read<
+                                                      LocalistaionControllerprovider>()
+                                                  .adress
+                                                  .text;
+                                              var locations =
+                                                  await locationFromAddress(
+                                                      locationSelected);
                                               await FireStoreServices()
                                                   .createStore(
                                                 storeImage:
@@ -704,7 +712,9 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                         .getImageurl(context),
                                                 storeOwner: singedInUser,
                                                 storeName: storeName,
-                                                storeLocation: "storeLocation",
+                                                storeLocation: GeoPoint(
+                                                    locations.first.latitude,
+                                                    locations.first.longitude),
                                                 storeSectors: context
                                                     .read<BusinessProvider>()
                                                     .chekedsectorsList

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:provider/provider.dart';
-import 'package:proximitystore/pages/pages.dart';
 import 'package:proximitystore/widgets/background_image.dart';
 
 import '../../config/routes/routes.dart';
@@ -63,22 +62,36 @@ class AddLocalisationAddressPage extends StatelessWidget {
                     child: Column(
                       children: [
                         Consumer<LocalistaionControllerprovider>(
-                          builder: (context, value, child) => AutocompleteSearchAdresse(
+                          builder: (context, value, child) =>
+                              AutocompleteSearchAdresse(
                             // minhei: 250,
                             symetricPadding: 0.0853,
                             searchPrefix: true,
                             labelEnabled: false,
                             onSuggestionSelected: (suggestion) {
-                              context.read<LocalistaionControllerprovider>().addressSelected(
-                                    suggestion: suggestion ?? Prediction(description: 'adress n\'éxiste pas'),
+                              context
+                                  .read<LocalistaionControllerprovider>()
+                                  .addressSelected(
+                                    suggestion: suggestion ??
+                                        Prediction(
+                                            description:
+                                                'adress n\'éxiste pas'),
                                   );
 
-                              context.read<LocalistaionControllerprovider>().setIsAdressSelected();
-                              if (context.read<LocalistaionControllerprovider>().isAdressSelectedInParis(
-                                  context, suggestion!.description ?? 'adress n\'éxiste pas')) {
-                                Navigator.pushNamed(context, AppRoutes.geolocationSearchProductPage);
+                              context
+                                  .read<LocalistaionControllerprovider>()
+                                  .setIsAdressSelected();
+                              if (context
+                                  .read<LocalistaionControllerprovider>()
+                                  .isAdressSelectedInParis(
+                                      context,
+                                      suggestion!.description ??
+                                          'adress n\'éxiste pas')) {
+                                Navigator.pushNamed(context,
+                                    AppRoutes.geolocationSearchProductPage);
                               } else {
-                                Navigator.pushNamed(context, AppRoutes.geoLocationOutsideParisPage);
+                                Navigator.pushNamed(context,
+                                    AppRoutes.geoLocationOutsideParisPage);
                               }
                             },
                             hintText: 'town'.tr(),

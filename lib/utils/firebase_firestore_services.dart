@@ -49,7 +49,7 @@ class FireStoreServices {
   Future createStore({
     required String storeOwner,
     required String storeName,
-    required String storeLocation,
+    required GeoPoint storeLocation,
     required String storeImage,
     required List<String> storeSectors,
   }) async {
@@ -59,7 +59,7 @@ class FireStoreServices {
       storeId: docStore.id,
       storeSectors: storeSectors,
       storeName: storeName,
-      storeLocation: '',
+      storeLocation: storeLocation,
       storeImage: storeImage,
     );
     await docStore.set(newStore.toJson());
@@ -117,9 +117,17 @@ class FireStoreServices {
           .where((store) =>
               store.storeOwnerId == FirebaseAuth.instance.currentUser!.uid)
           .toList()
-          .single
+          .first
           .storeSectors)
-      .last;
+      .first;
+
+//       var collection = FirebaseFirestore.instance.collection('DriverList');
+// var querySnapshot = await collection.get();
+// for (var queryDocumentSnapshot in querySnapshot.docs) {
+//   Map<String, dynamic> data = queryDocumentSnapshot.data();
+//   var name = data['name'];
+//   var phone = data['phone'];
+// }
 
   Stream<bool> getSignedInStoreHasProduct() =>
       storeCollection.snapshots().map((snapshot) =>

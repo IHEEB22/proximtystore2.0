@@ -63,10 +63,15 @@ class AutocompleteSearchAdresse extends StatelessWidget {
               errorBuilder: (context, error) => SizedBox.shrink(
                 child: Text('erreur'),
               ),
-              validator: (addres) => ValidationItem(val: addres)
-                  .validateTown(town: context.read<LocalistaionControllerprovider>().adress.text, context: context),
+              validator: (addres) => ValidationItem(val: addres).validateTown(
+                  town: context
+                      .read<LocalistaionControllerprovider>()
+                      .adress
+                      .text,
+                  context: context),
               onSuggestionSelected: onSuggestionSelected,
-              loadingBuilder: (context) => Center(child: CircularProgressIndicator()),
+              loadingBuilder: (context) =>
+                  Center(child: CircularProgressIndicator()),
               suggestionsBoxVerticalOffset: 0.022.sh,
               hideSuggestionsOnKeyboardHide: false,
               suggestionsBoxDecoration: SuggestionsBoxDecoration(
@@ -117,7 +122,8 @@ class AutocompleteSearchAdresse extends StatelessWidget {
                   ),
                 ),
               ),
-              suggestionsCallback: context.read<LocalistaionControllerprovider>().searchLocation,
+              suggestionsCallback:
+                  context.read<LocalistaionControllerprovider>().searchLocation,
               textFieldConfiguration: TextFieldConfiguration(
                 // onChnged not used
                 onChanged: onChanged,
@@ -127,9 +133,12 @@ class AutocompleteSearchAdresse extends StatelessWidget {
                         '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'),
                   ),
                 ],
-                controller: context.watch<LocalistaionControllerprovider>().adress,
+                controller:
+                    context.watch<LocalistaionControllerprovider>().adress,
                 onTap: () {
-                  context.read<LocalistaionControllerprovider>().disposeAdressListeners();
+                  context
+                      .read<LocalistaionControllerprovider>()
+                      .disposeAdressListeners();
                 },
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(
                       height: 1.2,
@@ -139,7 +148,9 @@ class AutocompleteSearchAdresse extends StatelessWidget {
                     ),
                 decoration: InputDecoration(
                   isDense: searchPrefix,
-                  prefixIconConstraints: searchPrefix ? BoxConstraints(maxHeight: 0.028.sh, maxWidth: 0.1.sw) : null,
+                  prefixIconConstraints: searchPrefix
+                      ? BoxConstraints(maxHeight: 0.028.sh, maxWidth: 0.1.sw)
+                      : null,
                   prefixIcon: searchPrefix
                       ? Image(
                           height: 0.12.sh,
@@ -164,7 +175,8 @@ class AutocompleteSearchAdresse extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     letterSpacing: 0.2,
                   ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 0.0426.sw, vertical: 0.0166.sh),
+                  contentPadding: EdgeInsets.symmetric(
+                      horizontal: 0.0426.sw, vertical: 0.0166.sh),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(8.sm),

@@ -24,36 +24,6 @@ class GeoLocationOffPage extends StatefulWidget {
 }
 
 class _GeoLocationOffPageState extends State<GeoLocationOffPage> {
-  // final geolocator = geo.Geolocator.getCurrentPosition(forceAndroidLocationManager: true);
-  // geo.Position? _currentPosition;
-  // String currentAddress = "";
-
-  // void getCurrentLocation() {
-  //   geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high).then((geo.Position position) {
-  //     setState(() {
-  //       _currentPosition = position;
-  //     });
-
-  //     getAddressFromLatLng();
-  //   }).catchError((e) {
-  //     print(e);
-  //   });
-  // }
-
-  // void getAddressFromLatLng() async {
-  //   try {
-  //     List<Placemark> p = await placemarkFromCoordinates(_currentPosition!.latitude, _currentPosition!.longitude);
-
-  //     Placemark place = p[0];
-
-  //     setState(() {
-  //       currentAddress = "${place.thoroughfare},${place.subThoroughfare},${place.name}, ${place.subLocality}";
-  //     });
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +51,10 @@ class _GeoLocationOffPageState extends State<GeoLocationOffPage> {
                             children: <InlineSpan>[
                               TextSpan(
                                 text: 'proximity'.tr(),
-                                style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1
+                                    ?.copyWith(
                                       color: AppColors.blueColor,
                                       fontSize: 24.sp,
                                       height: 1.2,
@@ -89,7 +62,10 @@ class _GeoLocationOffPageState extends State<GeoLocationOffPage> {
                               ),
                               TextSpan(
                                 text: 'store'.tr() + ' ',
-                                style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1
+                                    ?.copyWith(
                                       color: AppColors.pinkColor,
                                       fontSize: 24.sp,
                                       height: 1.2,
@@ -97,7 +73,10 @@ class _GeoLocationOffPageState extends State<GeoLocationOffPage> {
                               ),
                               TextSpan(
                                 text: 'hasNoAccressToYourLocation'.tr(),
-                                style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1
+                                    ?.copyWith(
                                       color: AppColors.darkBlueColor,
                                       fontSize: 24.sp,
                                       height: 1.2,
@@ -117,7 +96,10 @@ class _GeoLocationOffPageState extends State<GeoLocationOffPage> {
                           children: [
                             Text(
                               'proximityStoreNeedsToAccessYourLocation'.tr(),
-                              style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.copyWith(
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w400,
                                     height: 1.2,
@@ -136,7 +118,8 @@ class _GeoLocationOffPageState extends State<GeoLocationOffPage> {
                           ),
                           child: CustomBlueButton(
                             onPressed: () async {
-                              var locationStatus = await Permission.location.request();
+                              var locationStatus =
+                                  await Permission.location.request();
                               // getCurrentLocation();
 
                               if (locationStatus.isGranted) {
@@ -145,10 +128,12 @@ class _GeoLocationOffPageState extends State<GeoLocationOffPage> {
                               } else if (locationStatus.isPermanentlyDenied) {
                                 showDialog<String>(
                                   context: context,
-                                  builder: (BuildContext context) => AlertDialog(
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
                                     title: Text(
                                       'allowAppToAccessYourLocation'.tr(),
-                                      style: Theme.of(context).textTheme.subtitle2,
+                                      style:
+                                          Theme.of(context).textTheme.subtitle2,
                                     ),
                                     actions: <Widget>[
                                       TextButton(
@@ -170,12 +155,16 @@ class _GeoLocationOffPageState extends State<GeoLocationOffPage> {
 
                               if (locationStatus.isGranted) {
                                 Position position =
-                                    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                                    await Geolocator.getCurrentPosition(
+                                        desiredAccuracy: LocationAccuracy.high);
 
-                                if ((position.altitude == 48.856614) && (position.longitude == 2.3522219)) {
-                                  Navigator.pushNamed(context, AppRoutes.geolocationSearchProductPage);
+                                if ((position.altitude == 48.856614) &&
+                                    (position.longitude == 2.3522219)) {
+                                  Navigator.pushNamed(context,
+                                      AppRoutes.geolocationSearchProductPage);
                                 } else
-                                  (Navigator.pushNamed(context, AppRoutes.geoLocationOutsideParisPage));
+                                  (Navigator.pushNamed(context,
+                                      AppRoutes.geoLocationOutsideParisPage));
                               }
                             },
                             textInput: 'allowAccessToMyPosition'.tr(),
@@ -190,7 +179,8 @@ class _GeoLocationOffPageState extends State<GeoLocationOffPage> {
                             horizontal: 0.066.sw,
                           ),
                           child: CustomWhiteButton(
-                            onPressed: () => Navigator.pushNamed(context, AppRoutes.addLocalisationAddressPage),
+                            onPressed: () => Navigator.pushNamed(
+                                context, AppRoutes.addLocalisationAddressPage),
                             textInput: 'addAddress'.tr(),
                           ),
                         ),

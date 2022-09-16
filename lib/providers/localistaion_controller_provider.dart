@@ -57,13 +57,14 @@ class LocalistaionControllerprovider with ChangeNotifier {
     _predictionList = [];
     http.Response response = await http.get(
       headers: {"Content-Type": "application/json"},
-      Uri.parse("http://mvs.bslmeiyu.com/api/v1/config/place-api-autocomplete?search_text=${pattern}"),
+      Uri.parse(
+          "http://mvs.bslmeiyu.com/api/v1/config/place-api-autocomplete?search_text=${pattern}"),
     );
 
     Map<String, dynamic> data = jsonDecode(response.body);
-
     if (data['status'] == 'OK') {
-      data['predictions'].forEach((prediction) => _predictionList.add(Prediction.fromJson(prediction)));
+      data['predictions'].forEach(
+          (prediction) => _predictionList.add(Prediction.fromJson(prediction)));
     }
 
     notifyListeners();

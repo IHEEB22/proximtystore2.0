@@ -65,7 +65,8 @@ class WelcomePage extends StatelessWidget {
                         child: CustomBlueButton(
                             textInput: 'toLogIn'.tr(),
                             onPressed: () {
-                              LoginPageWrapper();
+                              Navigator.pushNamed(
+                                  context, AppRoutes.loginPageWrapper);
                               context
                                   .read<AuthentificationProvider>()
                                   .disposeControllers();

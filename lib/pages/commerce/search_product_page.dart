@@ -157,7 +157,7 @@ class _SearchProductPageState extends State<SearchProductPage> {
                             context
                                 .read<BusinessProvider>()
                                 .disposeDescription();
-                            context
+                            await context
                                 .read<BusinessProvider>()
                                 .updateChekedSectors();
                             context

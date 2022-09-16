@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:proximitystore/models/product.dart';
 
@@ -10,8 +11,9 @@ class Store {
   final List<String> storeSectors;
   List<Product> storeProducts = [];
   bool? storeStatus;
-  final String storeLocation;
+  final GeoPoint storeLocation;
   final String storeImage;
+
   String? storeDescription;
   bool? hasProduct;
 
@@ -31,7 +33,7 @@ class Store {
   factory Store.fromJson(Map<String, dynamic> json) {
     final storeStatus = json['store_status'] as bool?;
     final storeName = json['store_name'] as String;
-    final storeLocation = json['store_location'] as String;
+    final storeLocation = json['store_location'] as GeoPoint;
     final storeImage = json['store_image'] as String;
     final storeDescription = json['store_description'] as String?;
     // final storeProducts = json['store_products'] as List<Product>;
