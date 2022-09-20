@@ -284,6 +284,9 @@ class AddNewProductPage extends StatelessWidget {
                                                     'addNewProductpage'
                                               });
                                           Product newProduct = Product(
+                                            storeId: await context
+                                                .read<BusinessProvider>()
+                                                .getStoreIdConnected(),
                                             productName: context
                                                 .read<BusinessProvider>()
                                                 .productDescription
@@ -296,16 +299,13 @@ class AddNewProductPage extends StatelessWidget {
                                                 .productPrice
                                                 .text),
                                             productStatus: 'en attente',
+                                            productCategoy: context
+                                                .read<BusinessProvider>()
+                                                .lastSectorNameSelected,
                                           );
 
-                                          String? storeIdConnected;
-
                                           await FireStoreServices()
-                                              .createProduct(
-                                                  await context
-                                                      .read<BusinessProvider>()
-                                                      .getStoreIdConnected(),
-                                                  newProduct);
+                                              .createProduct(newProduct);
                                         },
                                         textInput: 'addTheProduct'.tr(),
                                       )),

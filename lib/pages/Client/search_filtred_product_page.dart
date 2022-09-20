@@ -5,13 +5,13 @@ import 'package:provider/provider.dart';
 import 'package:proximitystore/config/images/app_images.dart';
 
 import '../../config/colors/app_colors.dart';
+import '../../widgets/autocomplete_search_client_product_page.dart';
 
 import '../../providers/business_provider.dart';
 import '../../providers/client_provider.dart';
 
 import '../../widgets/sheet_store_sectors.dart';
 import '../../widgets/widgets.dart';
-import '../pages.dart';
 
 class SearchFiltredProductPage extends StatelessWidget {
   const SearchFiltredProductPage({Key? key}) : super(key: key);
@@ -156,11 +156,6 @@ class SearchFiltredProductPage extends StatelessWidget {
                                               context
                                                   .read<BusinessProvider>()
                                                   .isDeleteEnabled();
-                                              context
-                                                  .read<ClientProvider>()
-                                                  .getProductSuggestion(
-                                                      query: 'd',
-                                                      context: context);
                                             },
                                             child: Container(
                                               height: 16,

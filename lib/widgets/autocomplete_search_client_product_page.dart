@@ -9,11 +9,12 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import 'package:provider/provider.dart';
 import 'package:proximitystore/config/routes/routes.dart';
-import 'package:proximitystore/models/client_procduct.dart';
 import 'package:proximitystore/providers/client_provider.dart';
+import 'package:proximitystore/utils/firebase_firestore_services.dart';
 
 import '../config/colors/app_colors.dart';
 import '../config/images/app_images.dart';
+import '../models/product.dart';
 
 class AutocompleteSearchClientProduct extends StatelessWidget {
   const AutocompleteSearchClientProduct({Key? key}) : super(key: key);
@@ -27,9 +28,12 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
             visible: !context.watch<ClientProvider>().hideSuggestion,
             child: Container(
               // height: context.read<ClientProvider>().hideSuggestion ? 9.sh : 0.15.sh,
-              child: TypeAheadFormField<ClientProduct>(
+              child: TypeAheadFormField<Product>(
                 hideKeyboard: context.watch<ClientProvider>().hideKeyBord,
-                suggestionsBoxVerticalOffset: context.read<ClientProvider>().hideSuggestion ? 9.sh : 0.14.sh,
+                suggestionsBoxVerticalOffset:
+                    context.read<ClientProvider>().hideSuggestion
+                        ? 9.sh
+                        : 0.14.sh,
                 hideSuggestionsOnKeyboardHide: false,
                 suggestionsBoxDecoration: SuggestionsBoxDecoration(
                   color: AppColors.invisibleColor,
@@ -41,11 +45,14 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                   elevation: 0,
                 ),
                 debounceDuration: Duration(microseconds: 500),
-                onSuggestionSelected: (ClientProduct sugesstion) {
-                  context.read<ClientProvider>().setProductSelected(product: sugesstion);
-                  Navigator.pushNamed(context, AppRoutes.productDescriptionPage);
+                onSuggestionSelected: (Product sugesstion) {
+                  context
+                      .read<ClientProvider>()
+                      .setProductSelected(product: sugesstion);
+                  Navigator.pushNamed(
+                      context, AppRoutes.productDescriptionPage);
                 },
-                itemBuilder: (context, ClientProduct suggestion) {
+                itemBuilder: (context, Product suggestion) {
                   final product = suggestion;
 
                   return Card(
@@ -67,8 +74,10 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                             child: CachedNetworkImage(
                               fit: BoxFit.cover,
                               imageUrl: suggestion.productImage,
-                              placeholder: (context, url) => new CircularProgressIndicator(),
-                              errorWidget: (context, url, error) => new Icon(Icons.error),
+                              placeholder: (context, url) =>
+                                  new CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  new Icon(Icons.error),
                             ),
                           ),
                           Expanded(
@@ -80,10 +89,14 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: Padding(
-                                      padding: EdgeInsets.only(right: 0.05.sw, top: 0.0246.sh),
+                                      padding: EdgeInsets.only(
+                                          right: 0.05.sw, top: 0.0246.sh),
                                       child: Text(
                                         suggestion.productName.toUpperCase(),
-                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.copyWith(
                                               fontFamily: 'Montserrat',
                                               fontSize: 13.5.sp,
                                               height: 1.2,
@@ -95,33 +108,51 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                                   Padding(
                                     padding: EdgeInsets.only(right: 22),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           height: 0.04.sh,
                                           decoration: BoxDecoration(
-                                            border: Border.all(color: AppColors.whiteColor),
-                                            color: AppColors.tranparentPinkWhiteColor,
+                                            border: Border.all(
+                                                color: AppColors.whiteColor),
+                                            color: AppColors
+                                                .tranparentPinkWhiteColor,
                                           ),
                                           child: Center(
                                             child: Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 0.012.sw, vertical: 0.0049.sh),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 0.012.sw,
+                                                  vertical: 0.0049.sh),
                                               child: Text(
-                                                suggestion.storeFarDestination,
-                                                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                                context
+                                                        .read<ClientProvider>()
+                                                        .storeDetails[
+                                                    'store_far_destination'],
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.copyWith(
                                                       fontFamily: 'Montserrat',
                                                       fontSize: 10.sp,
-                                                      color: AppColors.pinkColor,
-                                                      fontWeight: FontWeight.w400,
+                                                      color:
+                                                          AppColors.pinkColor,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                     ),
                                               ),
                                             ),
                                           ),
                                         ),
                                         Text(
-                                          suggestion.productPrice.toString() + ' €',
-                                          style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                          suggestion.productPrice.toString() +
+                                              ' €',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              ?.copyWith(
                                                 fontSize: 18.sp,
                                                 fontWeight: FontWeight.w800,
                                                 color: AppColors.darkBlueColor,
@@ -152,21 +183,23 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                           padding: EdgeInsets.only(top: 0.08.sh),
                           child: Text(
                             'noResult'.tr(),
-                            style: Theme.of(context).textTheme.headline2?.copyWith(
-                                  color: AppColors.darkBlueColor,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.headline2?.copyWith(
+                                      color: AppColors.darkBlueColor,
+                                    ),
                           ),
                         ),
                         0.1.sh.verticalSpace,
                         Center(
                           child: Text(
                             'Ce produit se fait rare par ici !'.tr(),
-                            style: Theme.of(context).textTheme.headline4?.copyWith(
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.darkBlueColor,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.headline4?.copyWith(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w400,
+                                      color: AppColors.darkBlueColor,
+                                    ),
                           ),
                         ),
                         0.04.sh.verticalSpace,
@@ -176,7 +209,10 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                             child: RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(
-                                style: Theme.of(context).textTheme.headline4?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4
+                                    ?.copyWith(
                                       fontFamily: 'Montserrat',
                                       fontSize: 16.sp,
                                       height: 1.2,
@@ -184,11 +220,22 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                                       color: AppColors.darkBlueColor,
                                     ),
                                 children: <TextSpan>[
-                                  TextSpan(text: 'thereAreNoProductsMatching'.tr()),
                                   TextSpan(
-                                      text: ' “' + context.watch<ClientProvider>().labelTextController.text + '” ',
-                                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.sp)),
-                                  TextSpan(text: 'dans les magasins autour de vous actuellement'.tr()),
+                                      text: 'thereAreNoProductsMatching'.tr()),
+                                  TextSpan(
+                                      text: ' “' +
+                                          context
+                                              .watch<ClientProvider>()
+                                              .labelTextController
+                                              .text +
+                                          '” ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 18.sp)),
+                                  TextSpan(
+                                      text:
+                                          'dans les magasins autour de vous actuellement'
+                                              .tr()),
                                 ],
                               ),
                             ),
@@ -199,7 +246,8 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                   ),
                 ),
                 suggestionsCallback: (query) async {
-                  return await context.read<ClientProvider>().getProductSuggestion(query: query, context: context);
+                  return await FireStoreServices()
+                      .getProductsSuggestion(query: query, context: context);
                 },
                 textFieldConfiguration: TextFieldConfiguration(
                   onTap: () {
@@ -214,7 +262,8 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                           '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'),
                     ),
                   ],
-                  controller: context.read<ClientProvider>().labelTextController,
+                  controller:
+                      context.read<ClientProvider>().labelTextController,
                   style: Theme.of(context).textTheme.bodyText2?.copyWith(
                         height: 1.2,
                         fontSize: 16.sp,
@@ -224,11 +273,13 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                   decoration: InputDecoration(
                     counterText: '',
                     isDense: true,
-                    prefixIconConstraints: BoxConstraints(maxHeight: 0.028.sh, maxWidth: 0.1.sw),
+                    prefixIconConstraints:
+                        BoxConstraints(maxHeight: 0.028.sh, maxWidth: 0.1.sw),
                     suffixIcon: Padding(
                       padding: EdgeInsets.only(right: 0.018.sw),
                       child: GestureDetector(
-                        onTap: () => context.read<ClientProvider>().setLabelValue(''),
+                        onTap: () =>
+                            context.read<ClientProvider>().setLabelValue(''),
                         child: Image(
                             height: 0.2.sh,
                             width: 0.2.sw,
@@ -237,7 +288,8 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                             )),
                       ),
                     ),
-                    suffixIconConstraints: BoxConstraints(maxHeight: 26, maxWidth: 26),
+                    suffixIconConstraints:
+                        BoxConstraints(maxHeight: 26, maxWidth: 26),
                     prefixIcon: Image(
                         height: 0.12.sh,
                         width: 0.2.sw,
@@ -260,7 +312,8 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                       letterSpacing: 0.2,
                     ),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 0.0426.sw, vertical: 0.01847.sh),
+                    contentPadding: EdgeInsets.symmetric(
+                        horizontal: 0.0426.sw, vertical: 0.01847.sh),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(8.sm),

@@ -33,10 +33,17 @@ class ProductDescriptionPage extends StatelessWidget {
                         width: double.infinity,
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
-                          imageUrl: context.read<ClientProvider>().productSelected!.productImage,
-                          placeholder: (context, url) =>
-                              Container(child: Center(child: Image(image: AssetImage(AppImages.productImageHolder)))),
-                          errorWidget: (context, url, error) => new Icon(Icons.error),
+                          imageUrl: context
+                              .read<ClientProvider>()
+                              .productSelected!
+                              .productImage,
+                          placeholder: (context, url) => Container(
+                              child: Center(
+                                  child: Image(
+                                      image: AssetImage(
+                                          AppImages.productImageHolder)))),
+                          errorWidget: (context, url, error) =>
+                              new Icon(Icons.error),
                         ),
                       ),
                     ),
@@ -45,8 +52,16 @@ class ProductDescriptionPage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 0.0453.sw),
                       child: Column(
                         children: [
-                          Text(context.read<ClientProvider>().productSelected!.productName.toUpperCase(),
-                              style: Theme.of(context).textTheme.headline4?.copyWith(
+                          Text(
+                              context
+                                  .read<ClientProvider>()
+                                  .productSelected!
+                                  .productName
+                                  .toUpperCase(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
                                     fontSize: 15.sp,
                                     letterSpacing: 0.1,
                                     height: 1.5,
@@ -60,10 +75,14 @@ class ProductDescriptionPage extends StatelessWidget {
                               width: 0.25.sw,
                               child: TextButton(
                                 onPressed: () {},
-                                style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                                style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero),
                                 child: Text(
                                   'reportProduct'.tr(),
-                                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.copyWith(
                                         fontSize: 9.2.sp,
                                         fontFamily: 'Montserrat',
                                         decoration: TextDecoration.underline,
@@ -79,8 +98,16 @@ class ProductDescriptionPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                context.read<ClientProvider>().productSelected!.productPrice.toString() + ' €',
-                                style: Theme.of(context).textTheme.headline1?.copyWith(
+                                context
+                                        .read<ClientProvider>()
+                                        .productSelected!
+                                        .productPrice
+                                        .toString() +
+                                    ' €',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1
+                                    ?.copyWith(
                                       fontWeight: FontWeight.w800,
                                       color: AppColors.darkBlueColor,
                                     ),
@@ -89,15 +116,24 @@ class ProductDescriptionPage extends StatelessWidget {
                                 height: 0.04926.sh,
                                 width: 0.312.sw,
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.whiteColor),
+                                  border:
+                                      Border.all(color: AppColors.whiteColor),
                                   color: AppColors.tranparentPinkWhiteColor,
                                 ),
                                 child: Center(
                                   child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 0.012.sw, vertical: 0.0049.sh),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 0.012.sw,
+                                        vertical: 0.0049.sh),
                                     child: Text(
-                                      context.read<ClientProvider>().productSelected!.storeFarDestination,
-                                      style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                      context
+                                          .read<ClientProvider>()
+                                          .productSelected!
+                                          .productName,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.copyWith(
                                             fontFamily: 'Montserrat',
                                             fontSize: 12.sp,
                                             color: AppColors.pinkColor,
@@ -127,7 +163,10 @@ class ProductDescriptionPage extends StatelessWidget {
                               0.0295.sh.verticalSpace,
                               Text(
                                 'toBeFoundAt'.tr(),
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.copyWith(
                                       fontFamily: 'Montserrat',
                                       fontSize: 12.sp,
                                       fontWeight: FontWeight.w400,
@@ -135,11 +174,18 @@ class ProductDescriptionPage extends StatelessWidget {
                               ),
                               0.038.sh.verticalSpace,
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    context.read<ClientProvider>().productSelected!.storeName,
-                                    style: Theme.of(context).textTheme.headline2?.copyWith(
+                                    context
+                                        .read<ClientProvider>()
+                                        .productSelected!
+                                        .productName,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        ?.copyWith(
                                           fontFamily: 'Montserrat',
                                           fontSize: 24.sp,
                                           fontWeight: FontWeight.w700,
@@ -155,11 +201,13 @@ class ProductDescriptionPage extends StatelessWidget {
                                             top: Radius.circular(20.r),
                                           ),
                                         ),
-                                        builder: ((context) => StoreDescriptionSheet()),
+                                        builder: ((context) =>
+                                            StoreDescriptionSheet()),
                                       );
                                     },
                                     child: Padding(
-                                      padding: EdgeInsets.only(right: 0.0453.sw),
+                                      padding:
+                                          EdgeInsets.only(right: 0.0453.sw),
                                       child: Image(
                                         height: 0.0295.sh,
                                         width: 0.064.sw,
@@ -175,25 +223,39 @@ class ProductDescriptionPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    ((context.watch<ClientProvider>().productSelected!.storeStatus) ?? false)
+                                    // ((context.watch<ClientProvider>().productSelected!) ??
+                                    false
+                                        // )
                                         ? 'open'.tr()
                                         : 'close'.tr(),
-                                    style: Theme.of(context).textTheme.headline2?.copyWith(
-                                        color: (context.watch<ClientProvider>().productSelected!.storeStatus) ?? false
-                                            ? AppColors.lightGreenColor
-                                            : AppColors.lightPurpleColor,
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.w900),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        ?.copyWith(
+                                            color:
+                                                //  (context.watch<ClientProvider>().productSelected!.storeStatus) ??
+                                                false
+                                                    ? AppColors.lightGreenColor
+                                                    : AppColors
+                                                        .lightPurpleColor,
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w900),
                                   ),
                                   0.012.sw.horizontalSpace,
                                   Text(
                                     ' · ',
-                                    style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: 44.sp),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline1
+                                        ?.copyWith(fontSize: 44.sp),
                                   ),
                                   Text(
                                     'seeTimeTables'.tr(),
-                                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.copyWith(
                                           fontSize: 16.sp,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w300,
@@ -225,18 +287,21 @@ class ProductDescriptionPage extends StatelessWidget {
                         children: [
                           Text(
                             'gettingThere'.tr(),
-                            style: Theme.of(context).textTheme.headline2?.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.headline2?.copyWith(
+                                      fontWeight: FontWeight.w800,
+                                    ),
                           ),
                           0.0344.sh.verticalSpace,
                           Text(
-                            context.read<ClientProvider>().productSelected!.storeLocation ?? '',
-                            style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                            // context.read<ClientProvider>().productSelected!.storeLocation ??
+                            '',
+                            style:
+                                Theme.of(context).textTheme.bodyText1?.copyWith(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                           ),
                           0.0246.sh.verticalSpace,
                           Container(

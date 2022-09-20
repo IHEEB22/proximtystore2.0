@@ -7,10 +7,12 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 import 'package:proximitystore/config/routes/routes.dart';
 import 'package:proximitystore/providers/client_provider.dart';
+import 'package:proximitystore/utils/firebase_firestore_services.dart';
 
 import '../config/colors/app_colors.dart';
 import '../config/images/app_images.dart';
 import '../models/client_procduct.dart';
+import '../models/product.dart';
 import '../providers/business_provider.dart';
 
 class AutocompleteSearchLabel extends StatelessWidget {
@@ -20,7 +22,7 @@ class AutocompleteSearchLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<BusinessProvider>(
       builder: (context, value, child) => Container(
-        child: TypeAheadFormField<ClientProduct>(
+        child: TypeAheadFormField<Product>(
           suggestionsBoxVerticalOffset: 0.04.sh,
           hideSuggestionsOnKeyboardHide: false,
           suggestionsBoxDecoration: SuggestionsBoxDecoration(
@@ -29,17 +31,25 @@ class AutocompleteSearchLabel extends StatelessWidget {
             elevation: 1.5,
           ),
           debounceDuration: Duration(microseconds: 500),
-          onSuggestionSelected: (ClientProduct sugesstion) {
-            context.read<ClientProvider>().setLabelValue(sugesstion.productLabel);
-            Navigator.pushNamed(context, AppRoutes.searchFiltredProductPage);
+          onSuggestionSelected: (Product sugesstion) async {
+            await context
+                .read<ClientProvider>()
+                .setProductDetails(sugesstion.storeId)
+                .whenComplete(() => Navigator.pushNamed(
+                    context, AppRoutes.searchFiltredProductPage));
+            context
+                .read<ClientProvider>()
+                .setLabelValue(sugesstion.productName);
+            ;
           },
-          itemBuilder: (context, ClientProduct suggestion) {
+          itemBuilder: (context, Product suggestion) {
             final product = suggestion;
+
             return Container(
               child: ListTile(
                 contentPadding: EdgeInsets.only(left: 12, bottom: 0, right: 6),
                 leading: Text(
-                  product.productLabel,
+                  product.productName.split(' ')[0],
                   style: Theme.of(context).textTheme.bodyText1?.copyWith(
                         fontFamily: "Montserrat",
                         fontSize: 18.sp,
@@ -50,7 +60,7 @@ class AutocompleteSearchLabel extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: Text(
                     overflow: TextOverflow.ellipsis,
-                    product.productsector,
+                    'product',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontFamily: "Montserrat",
                           fontSize: 12.sp,
@@ -60,7 +70,9 @@ class AutocompleteSearchLabel extends StatelessWidget {
                   ),
                 ),
                 trailing: Text(
-                  '(' + '${product.inStock.toString()}' + '\+' ')',
+                  ''
+                  // '(' + '${product.inStock.toString()}' + '\+' ')'
+                  ,
                   style: Theme.of(context).textTheme.headline2?.copyWith(
                         fontFamily: "Montserrat",
                         fontSize: 12.sp,
@@ -86,7 +98,9 @@ class AutocompleteSearchLabel extends StatelessWidget {
               ),
             ),
           ),
-          suggestionsCallback: context.read<ClientProvider>().getLabelList,
+          suggestionsCallback: (String query) async {
+            return await FireStoreServices().getAllProductsLabel(query);
+          },
           textFieldConfiguration: TextFieldConfiguration(
             inputFormatters: [
               FilteringTextInputFormatter.deny(
@@ -96,7 +110,8 @@ class AutocompleteSearchLabel extends StatelessWidget {
             ],
             autofocus: false,
             focusNode: context.watch<BusinessProvider>().serachProductFocusNode,
-            controller: context.watch<BusinessProvider>().productTextEditingController,
+            controller:
+                context.watch<BusinessProvider>().productTextEditingController,
             style: Theme.of(context).textTheme.bodyText2?.copyWith(
                   height: 1.2,
                   fontSize: 16.sp,
@@ -105,7 +120,8 @@ class AutocompleteSearchLabel extends StatelessWidget {
                 ),
             decoration: InputDecoration(
               isDense: true,
-              prefixIconConstraints: BoxConstraints(maxHeight: 0.028.sh, maxWidth: 0.1.sw),
+              prefixIconConstraints:
+                  BoxConstraints(maxHeight: 0.028.sh, maxWidth: 0.1.sw),
               prefixIcon: Image(
                   height: 0.12.sh,
                   width: 0.2.sw,
@@ -128,7 +144,8 @@ class AutocompleteSearchLabel extends StatelessWidget {
                 fontWeight: FontWeight.w400,
                 letterSpacing: 0.2,
               ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 0.0426.sw, vertical: 0.0166.sh),
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: 0.0426.sw, vertical: 0.0166.sh),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(8.sm),

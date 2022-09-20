@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proximitystore/models/custom_user.dart';
 import 'package:proximitystore/models/product.dart';
@@ -17,8 +18,7 @@ class FireStoreServices {
   final productCollection = FirebaseFirestore.instance.collection('products');
   final storeProductCollection =
       FirebaseFirestore.instance.collection('storeProductCollection');
-  final clientProductCollection =
-      FirebaseFirestore.instance.collection('clientproduct');
+  final ProductCollection = FirebaseFirestore.instance.collection('Product');
   FirebaseStorage storage = FirebaseStorage.instance;
 
   Future createUser({required CustomUser newUser}) async {
@@ -73,9 +73,11 @@ class FireStoreServices {
     });
   }
 
-  Future createProduct(String storeConnected, Product newProduct) async {
-    print(storeConnected);
-    final docStoreConnected = storeCollection.doc(storeConnected);
+  Future createProduct(
+    Product newProduct,
+  ) async {
+    print(newProduct.storeId);
+    final docStoreConnected = storeCollection.doc(newProduct.storeId);
     await docStoreConnected
         .collection('products')
         .doc(newProduct.productName)
@@ -99,6 +101,55 @@ class FireStoreServices {
           .where(
               (user) => user.userId == FirebaseAuth.instance.currentUser!.uid)
           .toList());
+  Future<List<Product>> getAllProductsLabel(String query) async {
+    // return list of string feha el kelma mel product description where el query mawjud feha
+    // List<String> labelList = [];
+    List<Product> productNameList = [];
+    var collection = productCollection;
+    var querySnapshot = await collection.get();
+    for (var queryDocumentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data = queryDocumentSnapshot.data();
+      productNameList.add(Product.fromJson(data));
+      // productNameList.forEach((element) {
+      //   List<String> l = element.split(' ');
+      //   l.forEach((element) {
+      //     element.toLowerCase().startsWith(query.toLowerCase()) &&
+      //             !labelList.contains(element)
+      //         ? labelList.add(element)
+      //         : null;
+      //   });
+      // });
+    }
+    return productNameList
+        .where((element) => element.productName.startsWith(query))
+        .toList();
+  }
+
+  Future<List<Product>> getProductsSuggestion(
+      {required String query, required BuildContext context}) async {
+    // return list of string feha el kelma mel product description where el query mawjud feha
+    List<Product> productList = [];
+
+    var collection = productCollection;
+    var querySnapshot = await collection.get();
+    for (var queryDocumentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data = queryDocumentSnapshot.data();
+      productList.add(Product.fromJson(data));
+    }
+    return productList.where((product) {
+      final productNameLower = product.productName.toLowerCase();
+      final queryLower = query.toLowerCase();
+
+      Map<String, bool> filterSelected =
+          context.read<BusinessProvider>().chekedsectorsList;
+
+      if (filterSelected.isEmpty)
+        return productNameLower.contains(queryLower);
+      else
+        return productNameLower.contains(queryLower) &&
+            filterSelected.containsKey(product.productCategoy);
+    }).toList();
+  }
 
   Stream<String> getSignedInStoreId() =>
       userCollection.snapshots().map((snapshot) => snapshot.docs
@@ -145,6 +196,25 @@ class FireStoreServices {
     return storeCollection.doc(storeId).collection('products').snapshots().map(
         (snapshot) =>
             snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList());
+  }
+
+  Future<Map<String, dynamic>> getProductsDetails(storeId) async {
+    var storeDoc = await storeCollection.doc(storeId).get();
+    Position clientPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    Map<String, dynamic>? data = storeDoc.data();
+    GeoPoint storeLocation = data?['store_location'];
+    double distance = Geolocator.distanceBetween(
+      clientPosition.latitude,
+      clientPosition.latitude,
+      storeLocation.latitude,
+      storeLocation.longitude,
+    );
+    print(distance);
+    return {
+      'store_far_destination': distance.toString(),
+      'store_sectors': 'dsdsd'
+    };
   }
 
   // Stream<List<Product>> getAdminProduct() {
