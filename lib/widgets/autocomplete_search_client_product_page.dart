@@ -55,121 +55,149 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                 itemBuilder: (context, Product suggestion) {
                   final product = suggestion;
 
-                  return Card(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                        Radius.circular(8.r),
-                      )),
-                      height: 0.2.sh,
-                      width: 0.864.sw,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            width: 0.32.sw,
-                            height: 0.2.sh,
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: suggestion.productImage,
-                              placeholder: (context, url) =>
-                                  new CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  new Icon(Icons.error),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 0.0321.sw),
-                              child: Column(
+                  return FutureBuilder(
+                      future: FireStoreServices()
+                          .getProductsDistance(suggestion.storeId, context),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
+                        if (snapshot.hasData)
+                          return Card(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                Radius.circular(8.r),
+                              )),
+                              height: 0.2.sh,
+                              width: 0.864.sw,
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          right: 0.05.sw, top: 0.0246.sh),
-                                      child: Text(
-                                        suggestion.productName.toUpperCase(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            ?.copyWith(
-                                              fontFamily: 'Montserrat',
-                                              fontSize: 13.5.sp,
-                                              height: 1.2,
-                                              color: AppColors.darkBlueColor,
-                                            ),
+                                  SizedBox(
+                                    width: 0.32.sw,
+                                    height: 0.2.sh,
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      imageUrl: suggestion.productImage,
+                                      placeholder: (context, url) => Container(
+                                        color: AppColors.transparentGreyColor,
+                                        child: Transform.scale(
+                                          scale: 0.2,
+                                          child: new CircularProgressIndicator(
+                                            strokeWidth: 14.0,
+                                          ),
+                                        ),
                                       ),
+                                      errorWidget: (context, url, error) =>
+                                          new Icon(Icons.error),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.only(right: 22),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          height: 0.04.sh,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: AppColors.whiteColor),
-                                            color: AppColors
-                                                .tranparentPinkWhiteColor,
-                                          ),
-                                          child: Center(
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 0.0321.sw),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Expanded(
                                             child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 0.012.sw,
-                                                  vertical: 0.0049.sh),
+                                              padding: EdgeInsets.only(
+                                                  right: 0.05.sw,
+                                                  top: 0.0246.sh),
                                               child: Text(
-                                                context
-                                                        .read<ClientProvider>()
-                                                        .storeDetails[
-                                                    'store_far_destination'],
+                                                suggestion.productName
+                                                    .toUpperCase(),
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyText1
                                                     ?.copyWith(
                                                       fontFamily: 'Montserrat',
-                                                      fontSize: 10.sp,
-                                                      color:
-                                                          AppColors.pinkColor,
-                                                      fontWeight:
-                                                          FontWeight.w400,
+                                                      fontSize: 13.5.sp,
+                                                      height: 1.2,
+                                                      color: AppColors
+                                                          .darkBlueColor,
                                                     ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        Text(
-                                          suggestion.productPrice.toString() +
-                                              ' €',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1
-                                              ?.copyWith(
-                                                fontSize: 18.sp,
-                                                fontWeight: FontWeight.w800,
-                                                color: AppColors.darkBlueColor,
-                                              ),
-                                        ),
-                                      ],
+                                          Padding(
+                                            padding: EdgeInsets.only(right: 22),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  height: 0.04.sh,
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: AppColors
+                                                            .whiteColor),
+                                                    color: AppColors
+                                                        .tranparentPinkWhiteColor,
+                                                  ),
+                                                  child: Center(
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal:
+                                                                  0.012.sw,
+                                                              vertical:
+                                                                  0.0049.sh),
+                                                      child: Text(
+                                                        snapshot.data!,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            ?.copyWith(
+                                                              fontFamily:
+                                                                  'Montserrat',
+                                                              fontSize: 10.sp,
+                                                              color: AppColors
+                                                                  .pinkColor,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  suggestion.productPrice
+                                                          .toString() +
+                                                      ' €',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1
+                                                      ?.copyWith(
+                                                        fontSize: 18.sp,
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                        color: AppColors
+                                                            .darkBlueColor,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          0.0135.sh.verticalSpace,
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  0.0135.sh.verticalSpace,
                                 ],
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                          );
+                        else
+                          return SizedBox();
+                      });
                 },
                 noItemsFoundBuilder: (context) => Container(
                   height: 500,

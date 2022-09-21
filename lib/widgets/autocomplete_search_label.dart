@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,15 +34,11 @@ class AutocompleteSearchLabel extends StatelessWidget {
           ),
           debounceDuration: Duration(microseconds: 500),
           onSuggestionSelected: (Product sugesstion) async {
-            await context
-                .read<ClientProvider>()
-                .setProductDetails(sugesstion.storeId)
-                .whenComplete(() => Navigator.pushNamed(
-                    context, AppRoutes.searchFiltredProductPage));
             context
                 .read<ClientProvider>()
                 .setLabelValue(sugesstion.productName);
-            ;
+
+            Navigator.pushNamed(context, AppRoutes.searchFiltredProductPage);
           },
           itemBuilder: (context, Product suggestion) {
             final product = suggestion;
@@ -60,7 +58,7 @@ class AutocompleteSearchLabel extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: Text(
                     overflow: TextOverflow.ellipsis,
-                    'product',
+                    product.productCategoy,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontFamily: "Montserrat",
                           fontSize: 12.sp,
@@ -70,9 +68,10 @@ class AutocompleteSearchLabel extends StatelessWidget {
                   ),
                 ),
                 trailing: Text(
-                  ''
-                  // '(' + '${product.inStock.toString()}' + '\+' ')'
-                  ,
+                  '(' +
+                      // '${product.inStock.toString()}'
+                      Random().nextInt(100).toString() +
+                      '\+' ')',
                   style: Theme.of(context).textTheme.headline2?.copyWith(
                         fontFamily: "Montserrat",
                         fontSize: 12.sp,

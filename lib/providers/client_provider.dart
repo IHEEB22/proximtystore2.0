@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:proximitystore/models/product.dart';
-import 'package:proximitystore/utils/firebase_firestore_services.dart';
 
 class ClientProvider with ChangeNotifier {
   // Completer<GoogleMapController> mapController = Completer();
@@ -11,11 +10,6 @@ class ClientProvider with ChangeNotifier {
   bool hideSuggestion = false;
   Product? productSelected;
   bool hideKeyBord = false;
-  Map<String, dynamic> storeDetails = Map();
-  Future setProductDetails(String storeId) async {
-    storeDetails = await FireStoreServices().getProductsDetails(storeId);
-    notifyListeners();
-  }
 
   setLabelValue(String productLabel) {
     _labelTextController.text = productLabel;

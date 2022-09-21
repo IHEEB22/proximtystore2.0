@@ -66,18 +66,28 @@ class GeolocationEditAdressePage extends StatelessWidget {
                           symetricPadding: 0.0853,
                           searchPrefix: true,
                           labelEnabled: false,
-                          onSuggestionSelected: (suggestion) {
-                            context.read<LocalistaionControllerprovider>().addressSelected(
-                                  suggestion: suggestion ?? Prediction(description: 'adress n\'éxiste pas'),
-                                );
-                            if (context
+                          onSuggestionSelected: (suggestion) async {
+                            context
                                 .read<LocalistaionControllerprovider>()
-                                .isAdressSelectedInParis(context, suggestion!.description ?? 'adress n\'éxiste pas')) {
-                              Navigator.pushNamed(context, AppRoutes.geolocationSearchProductPage);
+                                .addressSelected(
+                                  suggestion: suggestion ??
+                                      Prediction(
+                                          description: 'adress n\'éxiste pas'),
+                                );
+                            if (await context
+                                .read<LocalistaionControllerprovider>()
+                                .isAdressSelectedInParis(
+                                    suggestion!.description ??
+                                        'adress n\'éxiste pas')) {
+                              Navigator.pushNamed(context,
+                                  AppRoutes.geolocationSearchProductPage);
                             } else {
-                              Navigator.pushNamed(context, AppRoutes.geoLocationOutsideParisPage);
+                              Navigator.pushNamed(context,
+                                  AppRoutes.geoLocationOutsideParisPage);
                             }
-                            context.read<LocalistaionControllerprovider>().setIsAdressSelected();
+                            context
+                                .read<LocalistaionControllerprovider>()
+                                .setIsAdressSelected();
                           },
                           hintText: 'town'.tr(),
                           labelText: 'addAdress'.tr(),
@@ -107,8 +117,11 @@ class GeolocationEditAdressePage extends StatelessWidget {
                       ),
                       child: CustomBlueButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, AppRoutes.geoLocationOutsideParisPage);
-                          context.read<LocalistaionControllerprovider>().disposeAdressValue();
+                          Navigator.pushNamed(
+                              context, AppRoutes.geoLocationOutsideParisPage);
+                          context
+                              .read<LocalistaionControllerprovider>()
+                              .disposeAdressValue();
                         },
                         textInput: 'allowAccessToMyPosition'.tr(),
                       ),

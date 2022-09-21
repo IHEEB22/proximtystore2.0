@@ -513,12 +513,11 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                         ),
                                         textInput: 'addPhoto'.tr(),
                                         onPressed: () async {
-                                          PermissionStatus locationStatus =
-                                              await Permission.location
-                                                  .request();
-                                          print(locationStatus);
+                                          PermissionStatus cameraStatus =
+                                              await Permission.camera.request();
+                                          print(cameraStatus);
 
-                                          if (locationStatus.isGranted) {
+                                          if (cameraStatus.isGranted) {
                                             showCupertinoModalPopup(
                                               context: context,
                                               builder: (_) =>
@@ -541,9 +540,9 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                 },
                                               ),
                                             );
-                                          } else if (locationStatus.isDenied) {
+                                          } else if (cameraStatus.isDenied) {
                                             return;
-                                          } else if (locationStatus
+                                          } else if (cameraStatus
                                               .isPermanentlyDenied) {
                                             showDialog<String>(
                                               context: context,
@@ -679,6 +678,14 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                             context
                                                 .read<BusinessProvider>()
                                                 .setValidateButtonPressed();
+                                            var locationSelected = context
+                                                .read<
+                                                    LocalistaionControllerprovider>()
+                                                .adress
+                                                .text;
+                                            var locations =
+                                                await locationFromAddress(
+                                                    locationSelected);
                                             if (_formKey.currentState
                                                     ?.validate() ??
                                                 true &&
@@ -686,7 +693,12 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                         .read<
                                                             BusinessProvider>()
                                                         .chekedsectorsList
-                                                        .isNotEmpty) {
+                                                        .isNotEmpty &&
+                                                    await context
+                                                        .read<
+                                                            LocalistaionControllerprovider>()
+                                                        .isAdressSelectedInParis(
+                                                            locationSelected)) {
                                               print('you can navigate');
 
                                               final String storeName = context
@@ -697,14 +709,6 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                   .read<BusinessProvider>()
                                                   .pickedFile;
 
-                                              var locationSelected = context
-                                                  .read<
-                                                      LocalistaionControllerprovider>()
-                                                  .adress
-                                                  .text;
-                                              var locations =
-                                                  await locationFromAddress(
-                                                      locationSelected);
                                               await FireStoreServices()
                                                   .createStore(
                                                 storeImage:

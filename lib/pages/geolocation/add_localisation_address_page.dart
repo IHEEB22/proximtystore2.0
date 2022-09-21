@@ -68,7 +68,7 @@ class AddLocalisationAddressPage extends StatelessWidget {
                             symetricPadding: 0.0853,
                             searchPrefix: true,
                             labelEnabled: false,
-                            onSuggestionSelected: (suggestion) {
+                            onSuggestionSelected: (suggestion) async {
                               context
                                   .read<LocalistaionControllerprovider>()
                                   .addressSelected(
@@ -81,10 +81,9 @@ class AddLocalisationAddressPage extends StatelessWidget {
                               context
                                   .read<LocalistaionControllerprovider>()
                                   .setIsAdressSelected();
-                              if (context
+                              if (await context
                                   .read<LocalistaionControllerprovider>()
                                   .isAdressSelectedInParis(
-                                      context,
                                       suggestion!.description ??
                                           'adress n\'éxiste pas')) {
                                 Navigator.pushNamed(context,

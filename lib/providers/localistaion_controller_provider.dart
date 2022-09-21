@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -12,6 +13,7 @@ class LocalistaionControllerprovider with ChangeNotifier {
   bool townOnFocus = false;
   bool isAddressNotSelected = true;
   bool adressSelectedInParis = false;
+  String clientLocation = '';
 
   Placemark _pickPlaceMark = Placemark();
   Placemark get pickPlaceMark => _pickPlaceMark;
@@ -20,11 +22,6 @@ class LocalistaionControllerprovider with ChangeNotifier {
 
   void setIsAdressSelected() {
     isAddressNotSelected = false;
-    notifyListeners();
-  }
-
-  void setAdressController({required String val}) {
-    adress.text = val;
     notifyListeners();
   }
 
@@ -51,6 +48,7 @@ class LocalistaionControllerprovider with ChangeNotifier {
   void addressSelected({required Prediction suggestion}) {
     adress.text = suggestion.description.toString();
     notifyListeners();
+    clientLocation = adress.text;
   }
 
   Future<List<Prediction>> searchLocation(String pattern) async {
@@ -71,12 +69,20 @@ class LocalistaionControllerprovider with ChangeNotifier {
     return _predictionList;
   }
 
-  bool isAdressSelectedInParis(BuildContext context, String suggestion) {
-    if ((suggestion.toLowerCase().contains('paris'.toLowerCase())) &&
-        (suggestion.toLowerCase().contains('france'.toLowerCase()))) {
-      return true;
-    } else
-      return false;
+  Future<bool> isAdressSelectedInParis(String suggestion) async {
+    var location = await locationFromAddress(suggestion);
+    GeoPoint clientLocation =
+        GeoPoint(location.first.latitude, location.first.longitude);
+// 48.901071, 2.345290
+// 48.816235, 2.361633
+
+// 48.845301, 2.258381
+// 48.850886, 2.415445
+
+    return (48.816235 <= clientLocation.latitude) &&
+        (clientLocation.latitude <= 48.901071) &&
+        (2.251873 <= clientLocation.longitude) &&
+        (clientLocation.longitude <= 2.415445);
   }
 }
 

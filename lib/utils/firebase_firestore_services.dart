@@ -1,16 +1,18 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proximitystore/models/custom_user.dart';
 import 'package:proximitystore/models/product.dart';
 import 'package:proximitystore/models/store.dart';
 import 'package:proximitystore/providers/business_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:proximitystore/providers/localistaion_controller_provider.dart';
 
 class FireStoreServices {
   final storeCollection = FirebaseFirestore.instance.collection('stores');
@@ -198,23 +200,59 @@ class FireStoreServices {
             snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList());
   }
 
-  Future<Map<String, dynamic>> getProductsDetails(storeId) async {
+  Future<String> getProductsDistance(storeId, BuildContext context) async {
     var storeDoc = await storeCollection.doc(storeId).get();
-    Position clientPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    Map<String, dynamic>? data = storeDoc.data();
-    GeoPoint storeLocation = data?['store_location'];
-    double distance = Geolocator.distanceBetween(
-      clientPosition.latitude,
-      clientPosition.latitude,
-      storeLocation.latitude,
-      storeLocation.longitude,
-    );
-    print(distance);
-    return {
-      'store_far_destination': distance.toString(),
-      'store_sectors': 'dsdsd'
-    };
+    // Position clientPosition = await Geolocator.getCurrentPosition(
+    //     desiredAccuracy: LocationAccuracy.high);
+    Map<String, dynamic> data = storeDoc.data()!;
+    // https://stackoverflow.com/questions/62399236/obtain-coordinates-from-an-address-flutter
+    // TO GET ACCURATE LOCATION
+    final clientPosition =
+        context.read<LocalistaionControllerprovider>().clientLocation;
+    print(clientPosition);
+    final clientLocation = await locationFromAddress(clientPosition);
+    GeoPoint storeLocation = data['store_location'];
+    print('storelocation :' +
+        storeLocation.latitude.toString() +
+        storeLocation.longitude.toString());
+    print('clientlocation :' +
+        clientLocation.first.latitude.toString() +
+        clientLocation.first.longitude.toString());
+    double lat1 = clientLocation.first.latitude;
+    double lon1 = clientLocation.first.longitude;
+    double lat2 = storeLocation.latitude;
+    double lon2 = storeLocation.longitude;
+
+    var p = 0.017453292519943295;
+    var a = 0.5 -
+        cos((lat2 - lat1) * p) / 2 +
+        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
+    double calculateDistance = 12742 * asin(sqrt(a));
+    print(calculateDistance);
+    return 'à ' +
+        (calculateDistance < 1
+            ? (calculateDistance * 1000).round().toString()
+            : calculateDistance.toStringAsFixed(1)) +
+        (calculateDistance > 1 ? '  kilomètres' : ' métres');
+  }
+
+  Future<Store> getStoreDetails(storeId) async {
+    var storeDoc = await storeCollection.doc(storeId).get();
+    // Position clientPosition = await Geolocator.getCurrentPosition(
+    //     desiredAccuracy: LocationAccuracy.high);
+    Map<String, dynamic> data = storeDoc.data()!;
+    Store storeDetails = Store.fromJson(data);
+    return storeDetails;
+  }
+
+  Future<String> getAdressbyCoordinates(GeoPoint storeLocation) async {
+    var places = await placemarkFromCoordinates(
+        storeLocation.latitude, storeLocation.longitude);
+    return places.first.country! +
+        ', ' +
+        places.first.locality! +
+        ' ' +
+        places.first.street!;
   }
 
   // Stream<List<Product>> getAdminProduct() {
