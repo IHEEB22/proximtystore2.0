@@ -2,156 +2,182 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:proximitystore/config/colors/app_colors.dart';
 import 'package:proximitystore/config/images/app_images.dart';
-import 'package:proximitystore/providers/localistaion_controller_provider.dart';
-import 'package:proximitystore/widgets/autocomplete_search_label.dart';
-import 'package:proximitystore/widgets/background_image.dart';
 
-import '../../config/routes/routes.dart';
+import '../../config/colors/app_colors.dart';
+
+import '../../providers/business_provider.dart';
 import '../../providers/client_provider.dart';
 
-class GeolocationSearchProductPage extends StatelessWidget {
-  const GeolocationSearchProductPage({Key? key}) : super(key: key);
+import '../../widgets/sheet_store_sectors.dart';
+import '../../widgets/widgets.dart';
+
+class SearchFiltredProductPage extends StatelessWidget {
+  const SearchFiltredProductPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    context.read<BusinessProvider>().disposeSectors();
     return Scaffold(
       body: SafeArea(
         child: Stack(
+          clipBehavior: Clip.none,
           children: [
             BackgroundImage(),
             SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  0.03.sh.verticalSpace,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Image(
-                        width: 0.064.sw,
-                        height: 0.032.sh,
-                        image: AssetImage(
-                          AppImages.pinIcon,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CustomBackButtonIcon(),
+                      0.014.sw.horizontalSpace,
+                      Padding(
+                        padding: EdgeInsets.only(top: 0.014.sh),
+                        child: Container(
+                          child: SizedBox(
+                            width: 0.76.sw,
+                            child: AutocompleteSearchClientProduct(),
+                          ),
                         ),
                       ),
-                      0.02.sw.horizontalSpace,
-                      GestureDetector(
-                        onTap: () async {
-                          await context
-                              .read<ClientProvider>()
-                              .setHideLabelSuggestion()
-                              .then((val) {
-                            Navigator.pushNamed(
-                                context, AppRoutes.geolocationEditAdressePage);
-                            // context
-                            //     .read<LocalistaionControllerprovider>()
-                            //     .disposeAdressValue();
-                          });
-                        },
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          context
-                                      .read<LocalistaionControllerprovider>()
-                                      .clientLocation
-                                      .length >
-                                  50
-                              ? context
-                                      .read<LocalistaionControllerprovider>()
-                                      .adress
-                                      .text
-                                      .substring(0, 50) +
-                                  '...'
-                              : context
-                                  .read<LocalistaionControllerprovider>()
-                                  .clientLocation,
-                          style:
-                              Theme.of(context).textTheme.bodyText1?.copyWith(
-                                    decoration: TextDecoration.underline,
-                                    fontSize: 14.sp,
-                                  ),
+                      0.024.sw.horizontalSpace,
+                      Consumer<BusinessProvider>(
+                        builder: (context, value, child) => GestureDetector(
+                          onTap: () {
+                            context
+                                .read<ClientProvider>()
+                                .setHideProductSuggestion();
+
+                            showModalBottomSheet<void>(
+                              isScrollControlled: true,
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20.r),
+                                ),
+                              ),
+                              builder: ((context) => SheetStoreSectors(
+                                    title: 'filtres'.tr(),
+                                  )),
+                            ).then(
+                              (value) {
+                                context
+                                    .read<ClientProvider>()
+                                    .setHideProductSuggestion();
+                              },
+                            );
+                          },
+                          child: !context
+                                  .read<BusinessProvider>()
+                                  .isDeleteEnabled()
+                              ? Padding(
+                                  padding: EdgeInsets.only(top: 0.026.sh),
+                                  child: Image(
+                                      height: 0.03.sh,
+                                      width: 0.065.sw,
+                                      image: AssetImage(AppImages.filterIcon)),
+                                )
+                              : Padding(
+                                  padding: EdgeInsets.only(top: 0.01.sh),
+                                  child: Image(
+                                      height: 0.06.sh,
+                                      width: 0.072.sw,
+                                      image:
+                                          AssetImage(AppImages.filterSelected)),
+                                ),
                         ),
                       ),
                     ],
                   ),
-                  0.14.sh.verticalSpace,
-                  Center(
-                    child: Text.rich(
-                      TextSpan(
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: 'proximity'.tr(),
-                            style:
-                                Theme.of(context).textTheme.headline3?.copyWith(
-                                      color: AppColors.blueColor,
-                                      fontSize: 40.sp,
-                                      letterSpacing: 0.6,
+                  Consumer<BusinessProvider>(
+                    builder: (context, value, child) => SizedBox(
+                      height: 200,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 0.022.sw),
+                        child: Container(
+                          width: double.infinity,
+                          child: Wrap(
+                            direction: Axis.horizontal,
+                            children: context
+                                .read<BusinessProvider>()
+                                .chekedsectorsList
+                                .keys
+                                .map((item) {
+                              return Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 0.2),
+                                    child: Container(
+                                      margin: EdgeInsets.all(3),
+                                      padding: EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 2,
+                                            color: AppColors.deepBlueColor),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(6.0),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 4,
+                                                bottom: 4,
+                                                right: 1.5,
+                                                left: 2),
+                                            child: Text(
+                                              item,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                      fontFamily: 'Montserrat',
+                                                      fontSize: 12.sp,
+                                                      color: AppColors
+                                                          .deepBlueColor,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              context
+                                                  .read<BusinessProvider>()
+                                                  .removeSector(item);
+                                              context
+                                                  .read<BusinessProvider>()
+                                                  .isDeleteEnabled();
+                                            },
+                                            child: Container(
+                                              height: 16,
+                                              width: 16,
+                                              child: Image(
+                                                  image: AssetImage(
+                                                      'assets/icons/delete_icon.png')),
+                                            ),
+                                          ),
+                                          0.0025.sw.horizontalSpace,
+                                        ],
+                                      ),
                                     ),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
                           ),
-                          TextSpan(
-                            text: 'store'.tr(),
-                            style:
-                                Theme.of(context).textTheme.headline3?.copyWith(
-                                      color: AppColors.pinkColor,
-                                      fontSize: 40.sp,
-                                      letterSpacing: 0.6,
-                                    ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                  0.065.sh.verticalSpace,
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0.085.sw),
-                    child: AutocompleteSearchLabel(),
-                  ),
-                  0.52.sh.verticalSpace,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      TextButton(
-                        onPressed: () async {
-                          await context
-                              .read<ClientProvider>()
-                              .setHideLabelSuggestion()
-                              .then((val) {
-                            Navigator.pushNamed(
-                                context, AppRoutes.welcomePageWrapper);
-                          });
-                        },
-                        child: Text.rich(
-                          TextSpan(
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: 'storeSpace'.tr(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline4
-                                    ?.copyWith(
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 14.sp,
-                                      height: 1.5,
-                                    ),
-                              ),
-                              WidgetSpan(
-                                child: 0.02.sw.horizontalSpace,
-                              ),
-                              WidgetSpan(
-                                  child: Image(
-                                height: 0.025.sh,
-                                width: 0.015.sh,
-                                image: AssetImage(AppImages.vector),
-                              )),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),

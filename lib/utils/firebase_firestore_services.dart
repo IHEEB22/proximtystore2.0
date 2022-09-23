@@ -125,7 +125,8 @@ class FireStoreServices {
       // });
     }
     return productNameList
-        .where((element) => element.productName.startsWith(query))
+        .where((element) =>
+            element.productName.toLowerCase().startsWith(query.toLowerCase()))
         .toList();
   }
 

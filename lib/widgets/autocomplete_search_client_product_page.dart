@@ -30,10 +30,7 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
               // height: context.read<ClientProvider>().hideSuggestion ? 9.sh : 0.15.sh,
               child: TypeAheadFormField<Product>(
                 hideKeyboard: context.watch<ClientProvider>().hideKeyBord,
-                suggestionsBoxVerticalOffset:
-                    context.read<ClientProvider>().hideProductSuggestion
-                        ? 9.sh
-                        : 0.14.sh,
+                suggestionsBoxVerticalOffset: 0.14.sh,
                 hideSuggestionsOnKeyboardHide: false,
                 suggestionsBoxDecoration: SuggestionsBoxDecoration(
                   color: AppColors.invisibleColor,

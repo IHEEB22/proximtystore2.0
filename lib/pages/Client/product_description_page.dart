@@ -210,10 +210,7 @@ class ProductDescriptionPage extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            context
-                                                .read<ClientProvider>()
-                                                .productSelected!
-                                                .productName,
+                                            snapshot.data!.storeName,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headline2
@@ -235,7 +232,9 @@ class ProductDescriptionPage extends StatelessWidget {
                                                   ),
                                                 ),
                                                 builder: ((context) =>
-                                                    StoreDescriptionSheet()),
+                                                    StoreDescriptionSheet(
+                                                      store: snapshot.data!,
+                                                    )),
                                               );
                                             },
                                             child: Padding(

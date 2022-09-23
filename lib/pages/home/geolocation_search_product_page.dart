@@ -1,14 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:proximitystore/config/colors/app_colors.dart';
 import 'package:proximitystore/config/images/app_images.dart';
+import 'package:proximitystore/providers/business_provider.dart';
+import 'package:proximitystore/providers/client_provider.dart';
 import 'package:proximitystore/providers/localistaion_controller_provider.dart';
 import 'package:proximitystore/widgets/autocomplete_search_label.dart';
 import 'package:proximitystore/widgets/background_image.dart';
-import 'package:proximitystore/wrappers/welcome_page_wrapper.dart';
 
 import '../../config/routes/routes.dart';
 
@@ -42,6 +42,10 @@ class GeolocationSearchProductPage extends StatelessWidget {
                       0.02.sw.horizontalSpace,
                       GestureDetector(
                         onTap: () {
+                          context
+                              .read<ClientProvider>()
+                              .setHideLabelSuggestion();
+
                           Navigator.pushNamed(
                               context, AppRoutes.geolocationEditAdressePage);
                           context
@@ -52,8 +56,7 @@ class GeolocationSearchProductPage extends StatelessWidget {
                           textAlign: TextAlign.center,
                           context
                                       .read<LocalistaionControllerprovider>()
-                                      .adress
-                                      .text
+                                      .clientLocation
                                       .length >
                                   50
                               ? context
@@ -64,8 +67,7 @@ class GeolocationSearchProductPage extends StatelessWidget {
                                   '...'
                               : context
                                   .read<LocalistaionControllerprovider>()
-                                  .adress
-                                  .text,
+                                  .clientLocation,
                           style:
                               Theme.of(context).textTheme.bodyText1?.copyWith(
                                     decoration: TextDecoration.underline,
@@ -113,6 +115,13 @@ class GeolocationSearchProductPage extends StatelessWidget {
                     children: <Widget>[
                       TextButton(
                         onPressed: () {
+                          context
+                              .read<ClientProvider>()
+                              .setHideLabelSuggestion();
+                          context
+                              .read<BusinessProvider>()
+                              .productTextEditingController
+                              .clear();
                           Navigator.pushNamed(
                               context, AppRoutes.welcomePageWrapper);
                           context

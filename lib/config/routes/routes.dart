@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proximitystore/pages/Client/search_filtred_product_page.dart';
 import 'package:proximitystore/pages/commerce/terms_of_service_page.dart';
 import 'package:proximitystore/pages/pages.dart';
 import 'package:proximitystore/widgets/custom_page_route.dart';

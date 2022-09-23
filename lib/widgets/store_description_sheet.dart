@@ -2,13 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:proximitystore/models/store.dart';
 import 'package:proximitystore/providers/client_provider.dart';
 
 import '../config/colors/app_colors.dart';
 import '../config/images/app_images.dart';
 
 class StoreDescriptionSheet extends StatelessWidget {
-  const StoreDescriptionSheet({Key? key}) : super(key: key);
+  final Store store;
+  StoreDescriptionSheet({Key? key, required Store this.store})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,7 @@ class StoreDescriptionSheet extends StatelessWidget {
                 ),
                 0.054.sh.verticalSpace,
                 Text(
-                  'gfgf',
+                  this.store.storeDescription ?? '',
                   // context.read<ClientProvider>().productSelected!.storeName.toString().toUpperCase(),
                   style: Theme.of(context).textTheme.headline2?.copyWith(
                         fontFamily: 'Montserrat',
@@ -49,7 +52,7 @@ class StoreDescriptionSheet extends StatelessWidget {
                       width: double.infinity,
                       child: Wrap(
                         direction: Axis.horizontal,
-                        children: ['computing', 'High-Tech'].map((item) {
+                        children: this.store.storeSectors.map((item) {
                           return Row(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,14 +99,20 @@ class StoreDescriptionSheet extends StatelessWidget {
                 Center(
                   child: SizedBox(
                     width: 0.888.sw,
-                    height: 0.25.sh,
+                    height:
+                        this.store.storeDescription != null ? 0.25.sh : 0.42.sh,
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
-                      imageUrl:
-                          //  context.watch<ClientProvider>().productSelected!.storeImage ??
-                          'notfound',
-                      placeholder: (context, url) =>
-                          new CircularProgressIndicator(),
+                      imageUrl: this.store.storeImage,
+                      placeholder: (context, url) => Container(
+                        color: AppColors.transparentGreyColor,
+                        child: Transform.scale(
+                          scale: 0.12,
+                          child: new CircularProgressIndicator(
+                            strokeWidth: 16.0,
+                          ),
+                        ),
+                      ),
                       errorWidget: (context, url, error) =>
                           new Icon(Icons.error),
                     ),
@@ -111,8 +120,7 @@ class StoreDescriptionSheet extends StatelessWidget {
                 ),
                 0.012.sh.verticalSpace,
                 Text(
-                  // context.watch<ClientProvider>().productSelected!.storeDescription ??
-                  '',
+                  this.store.storeDescription ?? '',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontFamily: 'Montserrat',
                       fontSize: 14.sp,

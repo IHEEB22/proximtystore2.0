@@ -16,6 +16,7 @@ class CustomBackButtonIcon extends StatelessWidget {
       onTap: (() {
         context.read<AuthentificationProvider>().disposeControllers();
         context.read<BusinessProvider>().disposeSettingsControllers();
+        context.read<BusinessProvider>().productTextEditingController.clear();
         context.read<LocalistaionControllerprovider>().disposeAdressValue();
         Navigator.pop(context);
       }),

@@ -13,5 +13,4 @@ export 'commerce/settings_page.dart';
 export 'commerce/store_description_page.dart';
 export 'commerce/search_product_page.dart';
 export 'commerce/add_new_product_page.dart';
-export 'client/search_filtred_product_page.dart';
 export 'client/product_description_page.dart';
