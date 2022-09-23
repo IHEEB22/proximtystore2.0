@@ -195,9 +195,9 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                             .sectorHintVisible,
                                         child: GestureDetector(
                                           onTap: () {
-                                            context
-                                                .read<ClientProvider>()
-                                                .setHideSuggestion();
+                                            // context
+                                            //     .read<ClientProvider>()
+                                            //     .setHideSuggestion();
                                             context
                                                 .read<BusinessProvider>()
                                                 .setSectorHintVisible();
@@ -705,6 +705,11 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                   .read<BusinessProvider>()
                                                   .businessName
                                                   .text;
+                                              final String storeDecription =
+                                                  context
+                                                      .read<BusinessProvider>()
+                                                      .businessName
+                                                      .text;
                                               context
                                                   .read<BusinessProvider>()
                                                   .pickedFile;
@@ -713,7 +718,9 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                   .createStore(
                                                 storeImage:
                                                     await FireStoreServices()
-                                                        .getImageurl(context),
+                                                        .getImageurl(
+                                                            context: context,
+                                                            path: 'stores'),
                                                 storeOwner: singedInUser,
                                                 storeName: storeName,
                                                 storeLocation: GeoPoint(
@@ -724,6 +731,8 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                     .chekedsectorsList
                                                     .keys
                                                     .toList(),
+                                                storeDescription:
+                                                    storeDecription,
                                               );
 
                                               context

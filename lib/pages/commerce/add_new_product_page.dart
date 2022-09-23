@@ -293,7 +293,9 @@ class AddNewProductPage extends StatelessWidget {
                                                 .text,
                                             productImage:
                                                 await FireStoreServices()
-                                                    .getImageurl(context),
+                                                    .getImageurl(
+                                                        context: context,
+                                                        path: 'products'),
                                             productPrice: double.parse(context
                                                 .read<BusinessProvider>()
                                                 .productPrice

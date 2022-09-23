@@ -29,11 +29,13 @@ class FireStoreServices {
     await docUser.set(newUser.toJson());
   }
 
-  Future<String> getImageurl(BuildContext context) async {
+  Future<String> getImageurl(
+      {required BuildContext context, required String path}) async {
     try {
       String imgaeName =
           context.read<BusinessProvider>().productDescription.text;
-      final storageRef = storage.ref().child('PRODUCT IMAGES').child(imgaeName);
+      final storageRef =
+          storage.ref().child(path.toUpperCase() + 'IMAGES').child(imgaeName);
       PickedFile? pickedFile =
           await context.read<BusinessProvider>().pickedFile;
       File imageFile = File(pickedFile!.path);
@@ -52,6 +54,7 @@ class FireStoreServices {
     required String storeOwner,
     required String storeName,
     required GeoPoint storeLocation,
+    required String storeDescription,
     required String storeImage,
     required List<String> storeSectors,
   }) async {
@@ -90,10 +93,9 @@ class FireStoreServices {
         .doc(newProduct.productName)
         .set(newProduct.toJson());
 
-    if (!await getSignedInStoreHasProduct().last)
-      await docStoreConnected.update({
-        'has_product': true,
-      });
+    await docStoreConnected.update({
+      'has_product': true,
+    });
   }
 
   Stream<List<CustomUser>> getUsers() =>

@@ -25,13 +25,13 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
       builder: (context, value, child) => Column(
         children: [
           Visibility(
-            visible: !context.watch<ClientProvider>().hideSuggestion,
+            visible: !context.watch<ClientProvider>().hideProductSuggestion,
             child: Container(
               // height: context.read<ClientProvider>().hideSuggestion ? 9.sh : 0.15.sh,
               child: TypeAheadFormField<Product>(
                 hideKeyboard: context.watch<ClientProvider>().hideKeyBord,
                 suggestionsBoxVerticalOffset:
-                    context.read<ClientProvider>().hideSuggestion
+                    context.read<ClientProvider>().hideProductSuggestion
                         ? 9.sh
                         : 0.14.sh,
                 hideSuggestionsOnKeyboardHide: false,
@@ -281,7 +281,8 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                   onTap: () {
                     context.read<ClientProvider>().hidekeyBord();
                   },
-                  enabled: !context.watch<ClientProvider>().hideSuggestion,
+                  enabled:
+                      !context.watch<ClientProvider>().hideProductSuggestion,
                   autofocus: true,
                   maxLength: 8,
                   inputFormatters: [

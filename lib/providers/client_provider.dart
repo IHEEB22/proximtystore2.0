@@ -7,22 +7,33 @@ class ClientProvider with ChangeNotifier {
   TextEditingController _labelTextController = TextEditingController();
   // List<ClientProduct> productList = [];
   TextEditingController get labelTextController => _labelTextController;
-  bool hideSuggestion = false;
+  bool hideProductSuggestion = false;
+  bool hideLabelSuggestion = false;
   Product? productSelected;
   bool hideKeyBord = false;
 
-  setLabelValue(String productLabel) {
+  void setLabelValue(String productLabel) {
     _labelTextController.text = productLabel;
     notifyListeners();
   }
 
-  setProductSelected({required Product product}) {
+  void setProductSelected({required Product product}) {
     productSelected = product;
     notifyListeners();
   }
 
-  setHideSuggestion() {
-    hideSuggestion = !hideSuggestion;
+  void setHideProductSuggestion() {
+    hideProductSuggestion = !hideProductSuggestion;
+    notifyListeners();
+  }
+
+  Future setHideLabelSuggestion() async {
+    hideLabelSuggestion = true;
+    notifyListeners();
+  }
+
+  void disableHideLabelSuggestion() {
+    hideLabelSuggestion = false;
     notifyListeners();
   }
 
