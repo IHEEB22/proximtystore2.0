@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -55,14 +57,29 @@ class AutocompleteSearchAdresse extends StatelessWidget {
             : SizedBox.shrink(),
         Container(
           padding: EdgeInsets.symmetric(horizontal: symetricPadding.sw),
-          child: Focus(
-            onFocusChange: (hasFocus) {},
-            child: TypeAheadFormField<Prediction?>(
+          child: FutureBuilder(
+            future: context
+                .watch<LocalistaionControllerprovider>()
+                .connectionState(),
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) =>
+                TypeAheadFormField<Prediction?>(
               minCharsForSuggestions: 1,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              errorBuilder: (context, error) => SizedBox.shrink(
-                child: Text('erreur'),
-              ),
+              autovalidateMode: (snapshot.hasData && snapshot.data == true)
+                  ? AutovalidateMode.onUserInteraction
+                  : AutovalidateMode.disabled,
+              errorBuilder: (context, error) {
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 0.2.sh),
+                  child: SizedBox(
+                    child: Center(
+                        child: Icon(
+                      Icons.wifi_off,
+                      size: 40,
+                      color: AppColors.GreyColor,
+                    )),
+                  ),
+                );
+              },
               validator: (addres) => ValidationItem(val: addres).validateTown(
                   town: context
                       .read<LocalistaionControllerprovider>()
@@ -72,12 +89,13 @@ class AutocompleteSearchAdresse extends StatelessWidget {
               onSuggestionSelected: onSuggestionSelected,
               loadingBuilder: (context) =>
                   Center(child: CircularProgressIndicator()),
-              suggestionsBoxVerticalOffset: 0.022.sh,
+              suggestionsBoxVerticalOffset: 0.03.sh,
               hideSuggestionsOnKeyboardHide: false,
               suggestionsBoxDecoration: SuggestionsBoxDecoration(
                 color: AppColors.invisibleColor,
                 constraints: BoxConstraints(
-                  maxHeight: 200,
+                  minHeight: 1.sh,
+                  minWidth: 0.912.sw,
                 ),
                 offsetX: 1.05,
                 elevation: 0,
@@ -85,6 +103,7 @@ class AutocompleteSearchAdresse extends StatelessWidget {
               debounceDuration: Duration(microseconds: 1200),
               itemBuilder: (context, Prediction? suggestion) {
                 final location = suggestion!;
+
                 return Card(
                   elevation: 0.2.sm,
                   margin: EdgeInsets.all(3.sm),
@@ -109,6 +128,10 @@ class AutocompleteSearchAdresse extends StatelessWidget {
                     ),
                   ),
                 );
+                // else {
+                //   return SizedBox.shrink();
+                // }
+                // });
               },
               noItemsFoundBuilder: (context) => Container(
                 child: Center(

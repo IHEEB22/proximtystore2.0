@@ -1,53 +1,43 @@
-// import 'package:flutter/material.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:async';
 
-// class GoogleMapCard extends StatefulWidget {
-//   @override
-//   _GoogleMapCardState createState() => _GoogleMapCardState();
-// }
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-// class _GoogleMapCardState extends State<GoogleMapCard> {
-//   GoogleMapController? mapController; //contrller for Google map
-//   Set<Marker> markers = Set(); //markers for google map
-//   LatLng showLocation = LatLng(27.7089427, 85.3086209);
-//   //location to show in map
+class GoogleMapCard extends StatefulWidget {
+  final GeoPoint storeLocation;
+  GoogleMapCard({required final GeoPoint this.storeLocation});
+  @override
+  _GoogleMapCardState createState() => _GoogleMapCardState();
+}
 
-//   @override
-//   void initState() {
-//     markers.add(Marker(
-//       //add marker on google map
-//       markerId: MarkerId(showLocation.toString()),
-//       position: showLocation, //position of marker
-//       infoWindow: InfoWindow(
-//         //popup info
-//         title: 'My Custom Title ',
-//         snippet: 'My Custom Subtitle',
-//       ),
-//       icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-//     ));
+class _GoogleMapCardState extends State<GoogleMapCard> {
+  Completer<GoogleMapController> _controller = Completer();
 
-//     //you can add more markers here
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GoogleMap(
-//       //Map widget from google_maps_flutter package
-//       zoomGesturesEnabled: true, //enable Zoom in, out on map
-//       initialCameraPosition: CameraPosition(
-//         //innital position in map
-//         target: showLocation, //initial position
-//         zoom: 10.0, //initial zoom level
-//       ),
-//       markers: markers, //markers to show on map
-//       mapType: MapType.normal, //map type
-//       onMapCreated: (controller) {
-//         //method called when map is created
-//         setState(() {
-//           mapController = controller;
-//         });
-//       },
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      body: GoogleMap(
+        tileOverlays: {},
+        markers: {
+          Marker(
+            markerId: MarkerId('SomeId'),
+            position: LatLng(
+                widget.storeLocation.latitude, widget.storeLocation.longitude),
+            infoWindow: InfoWindow(title: ''),
+          )
+        },
+        mapToolbarEnabled: true,
+        mapType: MapType.normal,
+        initialCameraPosition: CameraPosition(
+          target: LatLng(
+              widget.storeLocation.latitude, widget.storeLocation.longitude),
+          zoom: 16.4746,
+        ),
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+      ),
+    );
+  }
+}

@@ -41,6 +41,7 @@ dependencies:
   http: ^0.13.4
   geocoding: ^2.0.4
   geolocator: ^9.0.0
+  google_maps_flutter: ^2.2.0
   google_maps_webservice: ^0.0.20-nullsafety.5
   flutter_typeahead: ^4.0.0
   easy_localization: ^3.0.1

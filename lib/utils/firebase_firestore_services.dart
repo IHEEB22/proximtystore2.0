@@ -35,7 +35,7 @@ class FireStoreServices {
       String imgaeName =
           context.read<BusinessProvider>().productDescription.text;
       final storageRef =
-          storage.ref().child(path.toUpperCase() + 'IMAGES').child(imgaeName);
+          storage.ref().child(path.toUpperCase() + ' IMAGES').child(imgaeName);
       PickedFile? pickedFile =
           await context.read<BusinessProvider>().pickedFile;
       File imageFile = File(pickedFile!.path);
@@ -251,11 +251,11 @@ class FireStoreServices {
   Future<String> getAdressbyCoordinates(GeoPoint storeLocation) async {
     var places = await placemarkFromCoordinates(
         storeLocation.latitude, storeLocation.longitude);
-    return places.first.country! +
+    return (places.first.country ?? '') +
         ', ' +
-        places.first.locality! +
+        (places.first.locality ?? '') +
         ' ' +
-        places.first.street!;
+        (places.first.street ?? '');
   }
 
   // Stream<List<Product>> getAdminProduct() {

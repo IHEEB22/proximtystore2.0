@@ -11,6 +11,7 @@ import 'package:proximitystore/widgets/store_description_sheet.dart';
 import '../../config/colors/app_colors.dart';
 import '../../config/images/app_images.dart';
 import '../../models/store.dart';
+import '../../widgets/google_map_card.dart';
 import '../../widgets/widgets.dart';
 
 class ProductDescriptionPage extends StatelessWidget {
@@ -360,8 +361,10 @@ class ProductDescriptionPage extends StatelessWidget {
                                     color: AppColors.lightWhiteColor,
                                     height: 0.27.sh,
                                     width: 0.9146.sw,
-                                    // child:
-                                    //  GoogleMapCard(),
+                                    child: GoogleMapCard(
+                                      storeLocation:
+                                          snapshot.data!.storeLocation,
+                                    ),
                                   ),
                                   0.0295.sh.verticalSpace,
                                   SizedBox(
