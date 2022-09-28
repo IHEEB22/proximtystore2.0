@@ -18,10 +18,11 @@ class _GoogleMapCardState extends State<GoogleMapCard> {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: GoogleMap(
-        tileOverlays: {},
+        scrollGesturesEnabled: false,
         markers: {
           Marker(
             markerId: MarkerId('SomeId'),
+            icon: BitmapDescriptor.defaultMarkerWithHue(325),
             position: LatLng(
                 widget.storeLocation.latitude, widget.storeLocation.longitude),
             infoWindow: InfoWindow(title: ''),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:provider/provider.dart';
+import 'package:proximitystore/config/routes/routes.dart';
 import 'package:proximitystore/providers/client_provider.dart';
 import 'package:proximitystore/utils/firebase_firestore_services.dart';
 import 'package:proximitystore/widgets/store_description_sheet.dart';
@@ -11,6 +12,7 @@ import 'package:proximitystore/widgets/store_description_sheet.dart';
 import '../../config/colors/app_colors.dart';
 import '../../config/images/app_images.dart';
 import '../../models/store.dart';
+
 import '../../widgets/google_map_card.dart';
 import '../../widgets/widgets.dart';
 
@@ -371,7 +373,25 @@ class ProductDescriptionPage extends StatelessWidget {
                                       width: double.infinity,
                                       child: CustomBlueButton(
                                         textInput: 'showRoute'.tr(),
-                                        onPressed: () {},
+                                        onPressed: () async {
+                                          String storeLocation =
+                                              await FireStoreServices()
+                                                  .getAdressbyCoordinates(
+                                                      snapshot
+                                                          .data!.storeLocation);
+
+                                          await locationFromAddress(
+                                                  storeLocation)
+                                              .then((val) =>
+                                                  Navigator.pushNamed(context,
+                                                      AppRoutes.itinerairePage,
+                                                      arguments: {
+                                                        'storeLocation':
+                                                            storeLocation,
+                                                        'storeGeopoint':
+                                                            val.first,
+                                                      }));
+                                        },
                                       )),
                                   0.05.sh.verticalSpace,
                                 ],

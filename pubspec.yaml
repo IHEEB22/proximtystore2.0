@@ -52,8 +52,10 @@ dependencies:
   cloud_firestore: ^3.4.6
   firebase_auth: ^3.7.0
   fluttertoast: ^8.0.9
-  # auto_size_text: ^3.0.0
-
+  dio: ^4.0.6
+  flutter_polyline_points: ^1.0.0  # auto_size_text: ^3.0.0
+  google_directions_api: ^0.9.1
+  google_map_polyline_new: ^0.3.0+2
 dev_dependencies:
   flutter_test:
     sdk: flutter
