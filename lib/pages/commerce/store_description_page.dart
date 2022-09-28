@@ -17,7 +17,6 @@ import 'package:proximitystore/utils/firebase_auth_services.dart';
 import 'package:proximitystore/utils/firebase_firestore_services.dart';
 import 'package:proximitystore/widgets/sheet_store_sectors.dart';
 import 'package:proximitystore/providers/business_provider.dart';
-import 'package:proximitystore/providers/client_provider.dart';
 import 'package:proximitystore/widgets/custom_cupertino_dialog.dart';
 import 'package:proximitystore/widgets/custom_switch.dart';
 
@@ -735,18 +734,18 @@ class _StoreDescriptionPageState extends State<StoreDescriptionPage> {
                                                     storeDecription,
                                               );
 
-                                              context
-                                                  .read<
-                                                      LocalistaionControllerprovider>()
-                                                  .disposeAdressValue();
-                                              context
-                                                  .read<BusinessProvider>()
-                                                  .disposeSettingsControllers();
-
                                               Navigator.pushNamed(
                                                 context,
                                                 AppRoutes.searchProductPage,
-                                              );
+                                              ).then((_) {
+                                                context
+                                                    .read<
+                                                        LocalistaionControllerprovider>()
+                                                    .disposeAdressValue();
+                                                context
+                                                    .read<BusinessProvider>()
+                                                    .disposeSettingsControllers();
+                                              });
                                             } else {
                                               print('you can not navigate');
                                             }

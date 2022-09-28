@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proximitystore/models/custom_user.dart';
 import 'package:proximitystore/wrappers/has_product_wrapper.dart';
-import 'package:proximitystore/utils/firebase_auth_services.dart';
 import 'package:proximitystore/utils/firebase_firestore_services.dart';
 import '../pages/pages.dart';
 

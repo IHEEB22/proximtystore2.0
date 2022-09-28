@@ -13,7 +13,6 @@ import 'package:proximitystore/providers/authentification_provider.dart';
 import 'package:proximitystore/providers/business_provider.dart';
 import 'package:proximitystore/providers/client_provider.dart';
 import 'package:proximitystore/providers/localistaion_controller_provider.dart';
-import 'package:proximitystore/providers/sheet_provider.dart';
 import 'package:proximitystore/themes/app_themes.dart';
 
 Future<void> main() async {
@@ -38,9 +37,6 @@ Future<void> main() async {
       supportedLocales: [Locale('en', 'EN'), Locale('fr', 'FR')],
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider(
-            create: (_) => SheetProvider(),
-          ),
           ChangeNotifierProvider(
             create: (_) => LocalistaionControllerprovider(),
           ),

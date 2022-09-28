@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +10,6 @@ import 'package:proximitystore/utils/firebase_auth_services.dart';
 import 'package:proximitystore/widgets/widgets.dart';
 
 import '../../config/colors/app_colors.dart';
-import '../../providers/authentification_provider.dart';
 import '../../services/validation_items.dart';
 import '../../widgets/custom_cupertino_dialog.dart';
 

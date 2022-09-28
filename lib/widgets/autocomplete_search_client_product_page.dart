@@ -50,8 +50,6 @@ class AutocompleteSearchClientProduct extends StatelessWidget {
                       context, AppRoutes.productDescriptionPage);
                 },
                 itemBuilder: (context, Product suggestion) {
-                  final product = suggestion;
-
                   return FutureBuilder(
                       future: FireStoreServices()
                           .getProductsDistance(suggestion.storeId, context),

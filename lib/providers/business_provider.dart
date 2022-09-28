@@ -1,15 +1,12 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proximitystore/models/product.dart';
-import 'package:proximitystore/utils/firebase_auth_services.dart';
 import 'package:proximitystore/utils/firebase_firestore_services.dart';
 
-import '../models/sector.dart';
 import '../services/validation_items.dart';
 
 class BusinessProvider with ChangeNotifier {
@@ -57,7 +54,7 @@ class BusinessProvider with ChangeNotifier {
   bool _isRepeatNewPasswordVisible = false;
   int _temperLeft = 500;
   int _temperLeftProduct = 150;
-
+  bool hideProducts = false;
   bool _isProducFieldInFocus = false;
 
   // List<String> chekedsectorList = _chekedsectorsList;
@@ -156,19 +153,11 @@ class BusinessProvider with ChangeNotifier {
   }
 
   bool getIsAddProductButtonEnabled() {
-    return ValidationItem(val: _productDescription.text)
-                .validateProductPrice() ==
+    return ValidationItem(val: _productPrice.text).validateProductPrice() ==
             null &&
-        ValidationItem(val: _productPrice.text).validateProductPrice() == null;
-    //  &&
-    // !_isPickedFileEmpty;
-  }
-
-  Future<List<Sector>> getSectors() async {
-    final String response =
-        await rootBundle.loadString('assets/fake_data/sectorsList.json');
-    List data = await json.decode(response);
-    return data.map((json) => Sector.fromJson(json)).toList();
+        _productDescription.text.isNotEmpty &&
+        _productDescription.text.length >= 8 &&
+        !_isPickedFileEmpty;
   }
 
   void setSectorCheked({required String sectorName}) {
@@ -296,6 +285,7 @@ class BusinessProvider with ChangeNotifier {
 
   void setPickedFileFromCamera() async {
     pickedFile = picker
+        // ignore: deprecated_member_use
         .getImage(source: ImageSource.camera, imageQuality: 85)
         .whenComplete(() {
       _isPickedFileEmpty = false;
@@ -306,6 +296,7 @@ class BusinessProvider with ChangeNotifier {
 
   void setPickedFileFromGalery() async {
     pickedFile = picker
+        // ignore: deprecated_member_use
         .getImage(source: ImageSource.gallery, imageQuality: 85)
         .whenComplete(() {
       _isPickedFileEmpty = false;
@@ -414,9 +405,11 @@ class BusinessProvider with ChangeNotifier {
   }
 
   void disposeAddproductControllers() async {
+    bool _hideProducts = true;
     pickedFile = Future.value(null);
     _productDescription.clear();
     _productPrice.clear();
+    lastSectorNameSelected = '';
     notifyListeners();
   }
 

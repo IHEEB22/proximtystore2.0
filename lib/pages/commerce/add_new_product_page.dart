@@ -263,10 +263,9 @@ class AddNewProductPage extends StatelessWidget {
                       ),
                       0.0763.sh.verticalSpace,
                       Consumer<BusinessProvider>(
-                          builder: (context, value, child) => true
-                              // context
-                              //         .watch<BusinessProvider>()
-                              //         .getIsAddProductButtonEnabled()
+                          builder: (context, value, child) => context
+                                  .watch<BusinessProvider>()
+                                  .getIsAddProductButtonEnabled()
                               ? Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 0.043.sw),
@@ -274,12 +273,6 @@ class AddNewProductPage extends StatelessWidget {
                                       width: double.infinity,
                                       child: CustomBlueButton(
                                         onPressed: () async {
-                                          Navigator.pushNamed(context,
-                                              AppRoutes.searchProductPage,
-                                              arguments: {
-                                                'currentRoute':
-                                                    'addNewProductpage'
-                                              });
                                           Product newProduct = Product(
                                             storeId: await context
                                                 .read<BusinessProvider>()
@@ -303,8 +296,21 @@ class AddNewProductPage extends StatelessWidget {
                                                 .lastSectorNameSelected,
                                           );
 
-                                          await FireStoreServices()
-                                              .createProduct(newProduct);
+                                          newProduct.productPrice.toString().isNotEmpty &&
+                                                  newProduct.productCategoy
+                                                      .isNotEmpty &&
+                                                  newProduct
+                                                      .productImage.isNotEmpty
+                                              ? await FireStoreServices()
+                                                  .createProduct(newProduct)
+                                                  .then((value) => Navigator.pushNamed(
+                                                          context, AppRoutes.searchProductPage, arguments: {
+                                                        'currentRoute':
+                                                            'addNewProductpage'
+                                                      }).whenComplete(() => context
+                                                          .read<BusinessProvider>()
+                                                          .disposeAddproductControllers()))
+                                              : null;
                                         },
                                         textInput: 'addTheProduct'.tr(),
                                       )),

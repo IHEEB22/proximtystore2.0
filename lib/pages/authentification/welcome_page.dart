@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +7,6 @@ import 'package:proximitystore/config/routes/routes.dart';
 import 'package:proximitystore/providers/authentification_provider.dart';
 import 'package:proximitystore/widgets/background_image.dart';
 import 'package:proximitystore/widgets/custom_blue_button.dart';
-import 'package:proximitystore/wrappers/login_page_wrapper.dart';
 
 import '../../widgets/custom_back_button_icon.dart';
 
