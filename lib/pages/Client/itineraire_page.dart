@@ -24,7 +24,6 @@ class _ItinerairePageState extends State<ItinerairePage> {
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
-  String googleAPiKey = "Please provide your api key";
 
   @override
   void initState() {
@@ -72,8 +71,12 @@ class _ItinerairePageState extends State<ItinerairePage> {
                           ),
                           Marker(
                             markerId: MarkerId('location'),
-                            position: LatLng(40.438036903946085, -3.57),
-                            infoWindow: InfoWindow(title: 'moi'),
+                            position: LatLng(
+                                (arguments['clientLocation'] as Location)
+                                    .latitude,
+                                (arguments['clientLocation'] as Location)
+                                    .longitude),
+                            infoWindow: InfoWindow(title: 'Moi'),
                             icon: BitmapDescriptor.defaultMarkerWithHue(120),
                           )
                         },

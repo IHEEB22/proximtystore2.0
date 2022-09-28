@@ -6,6 +6,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:provider/provider.dart';
 import 'package:proximitystore/config/routes/routes.dart';
 import 'package:proximitystore/providers/client_provider.dart';
+import 'package:proximitystore/providers/localistaion_controller_provider.dart';
 import 'package:proximitystore/utils/firebase_firestore_services.dart';
 import 'package:proximitystore/widgets/store_description_sheet.dart';
 
@@ -379,7 +380,11 @@ class ProductDescriptionPage extends StatelessWidget {
                                                   .getAdressbyCoordinates(
                                                       snapshot
                                                           .data!.storeLocation);
-
+                                          List<Location> clientLocations =
+                                              await locationFromAddress(context
+                                                  .read<
+                                                      LocalistaionControllerprovider>()
+                                                  .clientLocation);
                                           await locationFromAddress(
                                                   storeLocation)
                                               .then((val) =>
@@ -390,6 +395,9 @@ class ProductDescriptionPage extends StatelessWidget {
                                                             storeLocation,
                                                         'storeGeopoint':
                                                             val.first,
+                                                        'clientLocation':
+                                                            clientLocations
+                                                                .first
                                                       }));
                                         },
                                       )),

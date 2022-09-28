@@ -1,20 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:geocoding/geocoding.dart';
 
 // or whatever name you want
-import 'package:geolocator/geolocator.dart' as geo;
 import 'package:geolocator/geolocator.dart';
 
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:proximitystore/config/colors/app_colors.dart';
 import 'package:proximitystore/config/routes/routes.dart';
+import 'package:proximitystore/providers/localistaion_controller_provider.dart';
 
 import 'package:proximitystore/widgets/background_image.dart';
 import 'package:proximitystore/widgets/custom_blue_button.dart';
 import 'package:proximitystore/widgets/custom_white_button.dart';
+
+import '../../utils/firebase_firestore_services.dart';
 
 class GeoLocationOffPage extends StatefulWidget {
   const GeoLocationOffPage({Key? key}) : super(key: key);
@@ -158,13 +161,22 @@ class _GeoLocationOffPageState extends State<GeoLocationOffPage> {
                                     await Geolocator.getCurrentPosition(
                                         desiredAccuracy: LocationAccuracy.high);
 
-                                if ((position.altitude == 48.856614) &&
-                                    (position.longitude == 2.3522219)) {
-                                  Navigator.pushNamed(context,
-                                      AppRoutes.geolocationSearchProductPage);
-                                } else
-                                  (Navigator.pushNamed(context,
-                                      AppRoutes.geoLocationOutsideParisPage));
+                                String clienLocation = await FireStoreServices()
+                                    .getAdressbyCoordinates(GeoPoint(
+                                        position.latitude, position.longitude));
+
+                                context
+                                    .read<LocalistaionControllerprovider>()
+                                    .isAdressSelectedInParis(clienLocation)
+                                    .then((value) => value
+                                        ? Navigator.pushNamed(
+                                            context,
+                                            AppRoutes
+                                                .geolocationSearchProductPage)
+                                        : Navigator.pushNamed(
+                                            context,
+                                            AppRoutes
+                                                .geoLocationOutsideParisPage));
                               }
                             },
                             textInput: 'allowAccessToMyPosition'.tr(),

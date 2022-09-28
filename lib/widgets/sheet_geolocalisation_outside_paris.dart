@@ -6,7 +6,6 @@ import 'package:proximitystore/config/images/app_images.dart';
 
 import 'package:proximitystore/providers/localistaion_controller_provider.dart';
 
-import 'package:proximitystore/providers/sheet_provider.dart';
 import 'package:proximitystore/services/validation_items.dart';
 
 import 'package:provider/provider.dart';
@@ -16,10 +15,12 @@ import 'package:proximitystore/widgets/text_input_field.dart';
 
 class SheetGeolocalisationOutsideParis extends StatefulWidget {
   @override
-  State<SheetGeolocalisationOutsideParis> createState() => _SheetGeolocalisationOutsideParisState();
+  State<SheetGeolocalisationOutsideParis> createState() =>
+      _SheetGeolocalisationOutsideParisState();
 }
 
-class _SheetGeolocalisationOutsideParisState extends State<SheetGeolocalisationOutsideParis> {
+class _SheetGeolocalisationOutsideParisState
+    extends State<SheetGeolocalisationOutsideParis> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -49,8 +50,11 @@ class _SheetGeolocalisationOutsideParisState extends State<SheetGeolocalisationO
                     0.054.sh.verticalSpace,
                     TextInputField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (email) => ValidationItem(val: email).validateEmail(),
-                      controller: context.read<LocalistaionControllerprovider>().emailTextEditingController,
+                      validator: (email) =>
+                          ValidationItem(val: email).validateEmail(),
+                      controller: context
+                          .read<LocalistaionControllerprovider>()
+                          .emailTextEditingController,
                       hintText: 'e-mail'.tr(),
                       inputLabel: 'e-mail'.tr(),
                       keyboardType: TextInputType.emailAddress,
@@ -63,10 +67,17 @@ class _SheetGeolocalisationOutsideParisState extends State<SheetGeolocalisationO
                           height: 100,
                           child: AutocompleteSearchAdresse(
                             onSuggestionSelected: (suggestion) {
-                              context.read<LocalistaionControllerprovider>().addressSelected(
-                                    suggestion: suggestion ?? Prediction(description: 'adress n\'éxiste pas'),
+                              context
+                                  .read<LocalistaionControllerprovider>()
+                                  .addressSelected(
+                                    suggestion: suggestion ??
+                                        Prediction(
+                                            description:
+                                                'adress n\'éxiste pas'),
                                   );
-                              context.read<LocalistaionControllerprovider>().setIsAdressSelected();
+                              context
+                                  .read<LocalistaionControllerprovider>()
+                                  .setIsAdressSelected();
                             },
                             symetricPadding: 0.0853,
                             searchPrefix: false,
@@ -92,15 +103,16 @@ class _SheetGeolocalisationOutsideParisState extends State<SheetGeolocalisationO
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
                               Navigator.pop(context);
-                              context.read<LocalistaionControllerprovider>().disposeAdressValue();
-                              context.read<LocalistaionControllerprovider>().disposeEmailValue();
+                              context
+                                  .read<LocalistaionControllerprovider>()
+                                  .disposeAdressValue();
+                              context
+                                  .read<LocalistaionControllerprovider>()
+                                  .disposeEmailValue();
                             } else {
-                              context.read<SheetProvider>().addsheetInputs(
-                                    email:
-                                        context.read<LocalistaionControllerprovider>().emailTextEditingController.text,
-                                    town: context.read<LocalistaionControllerprovider>().adress.text,
-                                  );
-                              context.read<LocalistaionControllerprovider>().disposeAdressValue();
+                              context
+                                  .read<LocalistaionControllerprovider>()
+                                  .disposeAdressValue();
                             }
                           },
                         ),

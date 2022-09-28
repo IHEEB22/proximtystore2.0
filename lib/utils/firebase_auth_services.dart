@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:proximitystore/models/custom_user.dart';
 
@@ -8,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:proximitystore/config/colors/app_colors.dart';
 import 'package:proximitystore/config/routes/routes.dart';
-import 'package:proximitystore/pages/authentification/reset_password.dart';
 import 'package:proximitystore/utils/firebase_firestore_services.dart';
 
 import '../providers/authentification_provider.dart';
@@ -35,25 +33,25 @@ class FirebaseAuthServices {
     } on FirebaseAuthException catch (error) {
       switch (error.code) {
         case "invalid-email":
-          errorMessage = "Your email address appears to be malformed.";
+          errorMessage = "invalidEmail".tr();
           break;
         case "wrong-password":
-          errorMessage = "Your password is wrong.";
+          errorMessage = "wrongPassword".tr();
           break;
         case "user-not-found":
-          errorMessage = "User with this email doesn't exist.";
+          errorMessage = "UserNotFound".tr();
           break;
         case "user-disabled":
-          errorMessage = "User with this email has been disabled.";
+          errorMessage = "UserDisabled".tr();
           break;
         case "operation-not-allowed":
-          errorMessage = "Signing in with Email and Password is not enabled.";
+          errorMessage = "operationNotAllowed".tr();
           break;
         case "too-many-requests":
-          errorMessage = "Too many requests. Try again later.";
+          errorMessage = "tooManyRequests".tr();
           break;
         default:
-          errorMessage = "Sorry , Somthing wont wrong";
+          errorMessage = "defaultErrorMessageForAuth".tr();
       }
       Fluttertoast.showToast(
           timeInSecForIosWeb: 5,
