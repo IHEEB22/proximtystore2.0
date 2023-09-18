@@ -1,5 +1,5 @@
 # proximitystore
-Overview
+# Overview
 Welcome to our cross-Marketplace platform developed using Flutter, offering users an intuitive way to explore various marketplaces and discover nearby stores. This project utilizes the power of the Google Maps API to enhance the user experience by providing location-based store recommendations.
 
 Features
